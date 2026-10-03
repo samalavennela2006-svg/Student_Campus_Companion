@@ -154,6 +154,52 @@ adapt to the available screen size.
 
 ---
 
+## Experiment 3B – Adaptive Layout Using LayoutBuilder
+
+In this experiment, I further improved the responsive design of the
+Student Campus Companion by using the LayoutBuilder widget.
+
+LayoutBuilder was used to obtain the available width provided by the
+parent widget through layout constraints. Based on the available width,
+the application automatically adjusts the arrangement of the user
+interface for different screen sizes.
+
+The Quick Access cards are arranged according to the available space.
+On medium-sized screens, the cards are displayed in an adaptive
+two-column layout, while on wider screens the layout makes use of the
+additional horizontal space.
+
+The Student Profile and Upcoming Event sections also adapt their
+arrangement according to the available layout constraints.
+
+The application uses Expanded widgets to distribute available space
+between cards and help prevent layout overflow.
+
+This experiment helped me understand how LayoutBuilder and layout
+constraints can be used to create flexible and adaptive Flutter
+interfaces for different screen sizes.
+
+### Experiment 3B Output
+
+The following screenshots demonstrate the adaptive behavior of the
+Student Campus Companion using LayoutBuilder.
+
+#### Tablet Layout
+
+When the available width is medium-sized, the Quick Access cards are
+arranged using an adaptive two-column layout.
+
+![Experiment 3B Tablet Layout](images/exp_3b_tablet.png)
+
+#### Desktop Layout
+
+When more horizontal space is available, the application adapts the
+dashboard to make effective use of the wider screen.
+
+![Experiment 3B Desktop Layout](images/exp_3b_desktop.png)
+
+---
+
 ## Expected Final Application
 
 The following sample image shows the expected design of the Student Campus
