@@ -110,6 +110,50 @@ interface after completing Experiment 2B.
 
 ---
 
+## Experiment 3A – Responsive UI Using MediaQuery
+
+In this experiment, I made the Student Campus Companion responsive
+using the MediaQuery widget in Flutter.
+
+MediaQuery was used to obtain information about the available screen
+width, screen height, and device orientation. Based on the screen size,
+the application automatically adjusts the arrangement and sizing of
+different UI elements.
+
+The Quick Access cards for Subjects, Assignments, Timetable, and
+Expenses are displayed in a two-column layout on wider screens and
+change to a single-column layout on smaller screens.
+
+The Student Profile section, text sizes, spacing, event section, and
+other UI elements are also adjusted according to the available screen
+size. The application detects both portrait and landscape orientations.
+
+This experiment helped me understand how MediaQuery can be used to
+create responsive Flutter interfaces that adapt to different screen
+sizes and orientations.
+
+### Experiment 3A Output
+
+The following screenshots demonstrate the responsive behavior of the
+Student Campus Companion using MediaQuery.
+
+#### Wide Screen
+
+The dashboard displays the Quick Access cards in a two-column layout
+when sufficient screen width is available.
+
+![Experiment 3A Wide Screen](images/exp_3a_wide.png)
+
+#### Small Screen
+
+On a smaller screen, the Quick Access cards automatically change to a
+single-column layout. The profile section and other UI elements also
+adapt to the available screen size.
+
+![Experiment 3A Small Screen](images/exp_3a_small.png)
+
+---
+
 ## Expected Final Application
 
 The following sample image shows the expected design of the Student Campus

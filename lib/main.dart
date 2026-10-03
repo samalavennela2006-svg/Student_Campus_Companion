@@ -22,217 +22,361 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // Get screen information using MediaQuery
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final orientation = MediaQuery.of(context).orientation;
+
+    // Responsive values
+   final isSmallScreen = screenWidth < 1000;
+    final isLandscape = orientation == Orientation.landscape;
+
+    final horizontalPadding = isSmallScreen ? 16.0 : 28.0;
+
+    final titleSize = isSmallScreen ? 26.0 : 32.0;
+
+    final sectionTitleSize = isSmallScreen ? 20.0 : 24.0;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Student Campus Companion',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: isSmallScreen ? 18 : 22,
+          ),
         ),
         centerTitle: true,
       ),
 
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding,
+            vertical: 18,
+          ),
+
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              // Welcome section
-              const Text(
+              // Responsive heading
+              Text(
                 'Hello, Student! 👋',
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: titleSize,
                   fontWeight: FontWeight.bold,
                 ),
               ),
 
-              const SizedBox(height: 5),
+              const SizedBox(height: 6),
 
-              const Text(
+              Text(
                 'Welcome back to your campus companion.',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: isSmallScreen ? 14 : 17,
                   color: Colors.grey,
                 ),
               ),
 
               const SizedBox(height: 20),
 
-              // Student profile card
+              // Responsive profile section
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(
+                  isSmallScreen ? 14 : 20,
+                ),
+
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18),
                   color: Colors.blue.shade50,
                 ),
 
-                child: Row(
-                  children: [
+                child: isSmallScreen && !isLandscape
+                    ? const Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 38,
+                            child: Icon(
+                              Icons.person,
+                              size: 45,
+                            ),
+                          ),
 
-                    // Image widget
-                  const CircleAvatar(
-                  radius: 38,
-                  child: Icon(
-                  Icons.person,
-                  size: 45,
-                 ),
+                          SizedBox(height: 12),
+
+                          Text(
+                            'Student Profile',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          SizedBox(height: 5),
+
+                          Text('CSE - Computer Science'),
+
+                          SizedBox(height: 3),
+
+                          Text('ACE Engineering College'),
+                        ],
+                      )
+
+                    : const Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 38,
+                            child: Icon(
+                              Icons.person,
+                              size: 45,
+                            ),
+                          ),
+
+                          SizedBox(width: 15),
+
+                          Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Student Profile',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                              SizedBox(height: 5),
+
+                              Text('CSE - Computer Science'),
+
+                              SizedBox(height: 3),
+
+                              Text('ACE Engineering College'),
+                            ],
+                          ),
+                        ],
+                      ),
+              ),
+
+              const SizedBox(height: 25),
+
+              Text(
+                'Quick Access',
+                style: TextStyle(
+                  fontSize: sectionTitleSize,
+                  fontWeight: FontWeight.bold,
                 ),
+              ),
 
-                    const SizedBox(width: 15),
+              const SizedBox(height: 15),
 
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              // Responsive cards
+              if (isSmallScreen)
+                Column(
+                  children: [
+                    campusCard(
+                      Icons.book,
+                      'Subjects',
+                      '6 Subjects',
+                      isSmallScreen,
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    campusCard(
+                      Icons.assignment,
+                      'Assignments',
+                      '5 Pending',
+                      isSmallScreen,
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    campusCard(
+                      Icons.schedule,
+                      'Timetable',
+                      'View Schedule',
+                      isSmallScreen,
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    campusCard(
+                      Icons.account_balance_wallet,
+                      'Expenses',
+                      '₹2,450',
+                      isSmallScreen,
+                    ),
+                  ],
+                )
+
+              else
+                Column(
+                  children: [
+                    Row(
                       children: [
-                        Text(
-                          'Student Profile',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: campusCard(
+                            Icons.book,
+                            'Subjects',
+                            '6 Subjects',
+                            false,
                           ),
                         ),
-                        SizedBox(height: 5),
-                        Text('CSE - Computer Science'),
-                        SizedBox(height: 3),
-                        Text('ACE Engineering College'),
+
+                        const SizedBox(width: 12),
+
+                        Expanded(
+                          child: campusCard(
+                            Icons.assignment,
+                            'Assignments',
+                            '5 Pending',
+                            false,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: campusCard(
+                            Icons.schedule,
+                            'Timetable',
+                            'View Schedule',
+                            false,
+                          ),
+                        ),
+
+                        const SizedBox(width: 12),
+
+                        Expanded(
+                          child: campusCard(
+                            Icons.account_balance_wallet,
+                            'Expenses',
+                            '₹2,450',
+                            false,
+                          ),
+                        ),
                       ],
                     ),
                   ],
                 ),
-              ),
 
               const SizedBox(height: 25),
 
-              const Text(
-                'Quick Access',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 15),
-
-              // First row
-              Row(
-                children: [
-                  Expanded(
-                    child: campusCard(
-                      Icons.book,
-                      'Subjects',
-                      '6 Subjects',
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: campusCard(
-                      Icons.assignment,
-                      'Assignments',
-                      '5 Pending',
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 12),
-
-              // Second row
-              Row(
-                children: [
-                  Expanded(
-                    child: campusCard(
-                      Icons.schedule,
-                      'Timetable',
-                      'View Schedule',
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: campusCard(
-                      Icons.account_balance_wallet,
-                      'Expenses',
-                      '₹2,450',
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 25),
-
-              // Upcoming event
-              const Text(
+              Text(
                 'Upcoming Event',
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: sectionTitleSize,
                   fontWeight: FontWeight.bold,
                 ),
               ),
 
               const SizedBox(height: 15),
 
-              Stack(
-                children: [
+              // Responsive event section
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(
+                  isSmallScreen ? 16 : 22,
+                ),
 
-                  Container(
-                    width: double.infinity,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18),
-                      color: Colors.orange.shade100,
-                    ),
-                  ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: Colors.orange.shade100,
+                ),
 
-                  const Positioned(
-                    left: 20,
-                    top: 25,
-                    child: Icon(
-                      Icons.event,
-                      size: 50,
-                      color: Colors.deepOrange,
-                    ),
-                  ),
+                child: isSmallScreen
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            Icons.event,
+                            size: 45,
+                            color: Colors.deepOrange,
+                          ),
 
-                  const Positioned(
-                    left: 85,
-                    top: 25,
-                    child: Text(
-                      'CSE Technical Fest',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                          const SizedBox(height: 10),
+
+                          const Text(
+                            'CSE Technical Fest',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          const SizedBox(height: 5),
+
+                          const Text(
+                            'Coding • Hackathon • Workshops',
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: const Text('View Event'),
+                          ),
+                        ],
+                      )
+
+                    : Row(
+                        children: [
+                          const Icon(
+                            Icons.event,
+                            size: 50,
+                            color: Colors.deepOrange,
+                          ),
+
+                          const SizedBox(width: 18),
+
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'CSE Technical Fest',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+
+                                SizedBox(height: 5),
+
+                                Text(
+                                  'Coding • Hackathon • Workshops',
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: const Text('View Event'),
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
-
-                  const Positioned(
-                    left: 85,
-                    top: 60,
-                    child: Text(
-                      'Coding • Hackathon • Workshops',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-
-                  Positioned(
-                    left: 85,
-                    bottom: 20,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('View Event'),
-                    ),
-                  ),
-                ],
               ),
 
               const SizedBox(height: 25),
 
-              // Today's reminder
+              // Reminder section
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(18),
+                padding: EdgeInsets.all(
+                  isSmallScreen ? 15 : 20,
+                ),
+
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18),
                   color: Colors.green.shade50,
@@ -242,7 +386,7 @@ class HomePage extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.notifications_active,
-                      size: 35,
+                      size: isSmallScreen ? 32 : 38,
                       color: Colors.green.shade700,
                     ),
 
@@ -250,7 +394,8 @@ class HomePage extends StatelessWidget {
 
                     const Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start,
                         children: [
                           Text(
                             'Today\'s Reminder',
@@ -259,7 +404,9 @@ class HomePage extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+
                           SizedBox(height: 5),
+
                           Text(
                             'Submit your Flutter Lab assignment.',
                           ),
@@ -275,8 +422,43 @@ class HomePage extends StatelessWidget {
               Center(
                 child: ElevatedButton.icon(
                   onPressed: () {},
+
                   icon: const Icon(Icons.dashboard),
-                  label: const Text('Explore Campus'),
+
+                  label: Text(
+                    'Explore Campus',
+                    style: TextStyle(
+                      fontSize: isSmallScreen ? 14 : 16,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              // Display screen information
+              Center(
+                child: Text(
+                  'Screen: ${screenWidth.toStringAsFixed(0)} × '
+                  '${screenHeight.toStringAsFixed(0)}',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 5),
+
+              Center(
+                child: Text(
+                  isLandscape
+                      ? 'Landscape Mode'
+                      : 'Portrait Mode',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
                 ),
               ),
 
@@ -286,18 +468,20 @@ class HomePage extends StatelessWidget {
         ),
       ),
 
-      // Bottom navigation-style section
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
+
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
+
           BottomNavigationBarItem(
             icon: Icon(Icons.event),
             label: 'Events',
           ),
+
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
@@ -311,17 +495,24 @@ class HomePage extends StatelessWidget {
     IconData icon,
     String title,
     String subtitle,
+    bool isSmallScreen,
   ) {
     return Container(
-      height: 125,
+      width: double.infinity,
+
+      height: isSmallScreen ? 110 : 125,
+
       padding: const EdgeInsets.all(15),
 
       decoration: BoxDecoration(
         color: Colors.white,
+
         borderRadius: BorderRadius.circular(18),
+
         border: Border.all(
           color: Colors.grey.shade300,
         ),
+
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.15),
@@ -331,33 +522,44 @@ class HomePage extends StatelessWidget {
         ],
       ),
 
-      child: Column(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+
         children: [
           Icon(
             icon,
-            size: 38,
+            size: isSmallScreen ? 32 : 38,
             color: Colors.blue,
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(width: 15),
 
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
 
-          const SizedBox(height: 4),
+            crossAxisAlignment: CrossAxisAlignment.start,
 
-          Text(
-            subtitle,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
-            ),
+            children: [
+              Text(
+                title,
+
+                style: TextStyle(
+                  fontSize: isSmallScreen ? 15 : 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 4),
+
+              Text(
+                subtitle,
+
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
           ),
         ],
       ),
