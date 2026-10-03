@@ -49,8 +49,7 @@ The application uses basic Flutter components such as MaterialApp,
 Scaffold, AppBar, Center, and Text to create the first application screen.
 
 The screen displays the Student Campus Companion title and a welcome
-message for the student. This provides the basic user interface foundation
-for adding more features in the upcoming experiments.
+message for the student.
 
 ## Experiment 1B Output
 
@@ -58,6 +57,30 @@ The following screenshot shows the initial Flutter user interface of the
 Student Campus Companion after completing Experiment 1B.
 
 ![Experiment 1B Output](images/exp_1b_output.png)
+
+---
+
+## Experiment 2A – Flutter Widgets and Layouts
+
+In this experiment, I explored commonly used Flutter widgets and layout
+structures to improve the Student Campus Companion interface.
+
+The application uses widgets such as Text, Icon, Container, and
+ElevatedButton. Row and Column are used to arrange the campus features,
+while Stack is used to create the upcoming event section.
+
+A student dashboard was created containing sections for Subjects,
+Assignments, Timetable, Expenses, and Upcoming Campus Events.
+
+This experiment helped in understanding widget nesting and layout
+management in Flutter.
+
+## Experiment 2A Output
+
+The following screenshot shows the Student Campus Companion dashboard
+after implementing Flutter widgets and layout structures.
+
+![Experiment 2A Output](images/exp_2a_output.png)
 
 ---
 
