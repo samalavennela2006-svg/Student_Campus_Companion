@@ -72,14 +72,13 @@ class HomePage extends StatelessWidget {
                   children: [
 
                     // Image widget
-                    ClipOval(
-                      child: Image.network(
-                        'https://i.pravatar.cc/150?img=47',
-                        width: 75,
-                        height: 75,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                  const CircleAvatar(
+                  radius: 38,
+                  child: Icon(
+                  Icons.person,
+                  size: 45,
+                 ),
+                ),
 
                     const SizedBox(width: 15),
 
