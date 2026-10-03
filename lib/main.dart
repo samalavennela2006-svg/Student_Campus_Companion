@@ -1,19 +1,32 @@
+import 'package:flutter/material.dart';
+
 void main() {
-  String appName = "Student Campus Companion";
-  String studentName = "Vennela";
-  int numberOfSubjects = 6;
-  double attendancePercentage = 85.5;
-  bool assignmentsCompleted = true;
+  runApp(const StudentCampusCompanionApp());
+}
 
-  int completedAssignments = assignmentsCompleted ? 5 : 0;
-  int studyHours = 3;
+class StudentCampusCompanionApp extends StatelessWidget {
+  const StudentCampusCompanionApp({super.key});
 
-  print("Student Campus Companion");
-  print("Student Name: $studentName");
-  print("Number of Subjects: $numberOfSubjects");
-  print("Attendance: $attendancePercentage%");
-  print("Study Hours: $studyHours");
-  print("Assignments Completed: $completedAssignments");
-  print("All Assignments Done: $assignmentsCompleted");
-  print("Welcome to $appName!");
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Student Campus Companion',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Student Campus Companion'),
+        ),
+        body: const Center(
+          child: Text(
+            'Welcome to Student Campus Companion!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

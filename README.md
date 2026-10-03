@@ -33,16 +33,38 @@ Campus Companion in the upcoming experiments.
 
 ## Experiment 1A Output
 
-The output of Experiment 1 displays basic student and application
+The output of Experiment 1A displays basic student and application
 information using Dart console statements.
 
 ![Experiment 1A Output](images/exp_1a_output.png)
 
 ---
 
+## Experiment 1B – Basic Flutter Application
+
+In this experiment, I developed the initial user interface of the Student
+Campus Companion using Flutter.
+
+The application uses basic Flutter components such as MaterialApp,
+Scaffold, AppBar, Center, and Text to create the first application screen.
+
+The screen displays the Student Campus Companion title and a welcome
+message for the student. This provides the basic user interface foundation
+for adding more features in the upcoming experiments.
+
+## Experiment 1B Output
+
+The following screenshot shows the initial Flutter user interface of the
+Student Campus Companion after completing Experiment 1B.
+
+![Experiment 1B Output](images/exp_1b_output.png)
+
+---
+
 ## Expected Final Application
 
-the following sample image shows the expected design of the student campus companion application after completing the planned features.
+The following sample image shows the expected design of the Student Campus
+Companion application after completing the planned features.
 
 ![Expected Final Application](screenshots/expexted_final_app.png)
 
