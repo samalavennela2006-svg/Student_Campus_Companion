@@ -12,228 +12,324 @@ class StudentCampusCompanionApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Student Campus Companion',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Student Campus Companion'),
-          centerTitle: true,
+      home: const HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Student Campus Companion',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
+      ),
 
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
 
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              // Welcome section
+              const Text(
+                'Hello, Student! 👋',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
 
-                // Welcome section
-                const Text(
-                  'Welcome, Student! 👋',
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                  ),
+              const SizedBox(height: 5),
+
+              const Text(
+                'Welcome back to your campus companion.',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Student profile card
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: Colors.blue.shade50,
                 ),
 
-                const SizedBox(height: 8),
+                child: Row(
+                  children: [
 
-                const Text(
-                  'Manage your campus activities in one place.',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                // Student information card
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.blue.shade100,
-                  ),
-
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.school,
-                        size: 50,
-                        color: Colors.blue,
+                    // Image widget
+                    ClipOval(
+                      child: Image.network(
+                        'https://i.pravatar.cc/150?img=47',
+                        width: 75,
+                        height: 75,
+                        fit: BoxFit.cover,
                       ),
+                    ),
 
-                      const SizedBox(width: 15),
+                    const SizedBox(width: 15),
 
-                      Column(
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Student Profile',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text('CSE - Computer Science'),
+                        SizedBox(height: 3),
+                        Text('ACE Engineering College'),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              const Text(
+                'Quick Access',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              // First row
+              Row(
+                children: [
+                  Expanded(
+                    child: campusCard(
+                      Icons.book,
+                      'Subjects',
+                      '6 Subjects',
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: campusCard(
+                      Icons.assignment,
+                      'Assignments',
+                      '5 Pending',
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              // Second row
+              Row(
+                children: [
+                  Expanded(
+                    child: campusCard(
+                      Icons.schedule,
+                      'Timetable',
+                      'View Schedule',
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: campusCard(
+                      Icons.account_balance_wallet,
+                      'Expenses',
+                      '₹2,450',
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 25),
+
+              // Upcoming event
+              const Text(
+                'Upcoming Event',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              Stack(
+                children: [
+
+                  Container(
+                    width: double.infinity,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18),
+                      color: Colors.orange.shade100,
+                    ),
+                  ),
+
+                  const Positioned(
+                    left: 20,
+                    top: 25,
+                    child: Icon(
+                      Icons.event,
+                      size: 50,
+                      color: Colors.deepOrange,
+                    ),
+                  ),
+
+                  const Positioned(
+                    left: 85,
+                    top: 25,
+                    child: Text(
+                      'CSE Technical Fest',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
+                  const Positioned(
+                    left: 85,
+                    top: 60,
+                    child: Text(
+                      'Coding • Hackathon • Workshops',
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+
+                  Positioned(
+                    left: 85,
+                    bottom: 20,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: const Text('View Event'),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 25),
+
+              // Today's reminder
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: Colors.green.shade50,
+                ),
+
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.notifications_active,
+                      size: 35,
+                      color: Colors.green.shade700,
+                    ),
+
+                    const SizedBox(width: 15),
+
+                    const Expanded(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
-                            'Student Dashboard',
+                            'Today\'s Reminder',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           SizedBox(height: 5),
-                          Text('CSE Department'),
+                          Text(
+                            'Submit your Flutter Lab assignment.',
+                          ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 25),
-
-                const Text(
-                  'Campus Features',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 15),
-
-                // Feature cards using Row and Column
-                Row(
-                  children: [
-                    Expanded(
-                      child: featureCard(
-                        Icons.book,
-                        'Subjects',
-                      ),
-                    ),
-
-                    const SizedBox(width: 12),
-
-                    Expanded(
-                      child: featureCard(
-                        Icons.assignment,
-                        'Assignments',
-                      ),
                     ),
                   ],
                 ),
+              ),
 
-                const SizedBox(height: 12),
+              const SizedBox(height: 25),
 
-                Row(
-                  children: [
-                    Expanded(
-                      child: featureCard(
-                        Icons.schedule,
-                        'Timetable',
-                      ),
-                    ),
-
-                    const SizedBox(width: 12),
-
-                    Expanded(
-                      child: featureCard(
-                        Icons.account_balance_wallet,
-                        'Expenses',
-                      ),
-                    ),
-                  ],
+              Center(
+                child: ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.dashboard),
+                  label: const Text('Explore Campus'),
                 ),
+              ),
 
-                const SizedBox(height: 25),
-
-                // Stack example
-                const Text(
-                  'Upcoming Event',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 12),
-
-                Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 130,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.orange.shade200,
-                      ),
-                    ),
-
-                    const Positioned(
-                      left: 20,
-                      top: 25,
-                      child: Icon(
-                        Icons.event,
-                        size: 45,
-                        color: Colors.deepOrange,
-                      ),
-                    ),
-
-                    const Positioned(
-                      left: 80,
-                      top: 25,
-                      child: Text(
-                        'CSE Technical Fest',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-
-                    const Positioned(
-                      left: 80,
-                      top: 60,
-                      child: Text(
-                        'Upcoming Campus Event',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-
-                    Positioned(
-                      right: 15,
-                      bottom: 15,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('View'),
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 20),
-
-                // Button
-                Center(
-                  child: ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.dashboard),
-                    label: const Text('Explore Campus'),
-                  ),
-                ),
-              ],
-            ),
+              const SizedBox(height: 15),
+            ],
           ),
         ),
+      ),
+
+      // Bottom navigation-style section
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event),
+            label: 'Events',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }
 
-  // Reusable feature card
-  static Widget featureCard(IconData icon, String title) {
+  static Widget campusCard(
+    IconData icon,
+    String title,
+    String subtitle,
+  ) {
     return Container(
-      height: 120,
+      height: 125,
+      padding: const EdgeInsets.all(15),
+
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(15),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(
           color: Colors.grey.shade300,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.15),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
 
       child: Column(
@@ -241,17 +337,27 @@ class StudentCampusCompanionApp extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 40,
+            size: 38,
             color: Colors.blue,
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
 
           Text(
             title,
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          const SizedBox(height: 4),
+
+          Text(
+            subtitle,
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.grey,
             ),
           ),
         ],
