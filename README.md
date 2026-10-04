@@ -200,6 +200,47 @@ dashboard to make effective use of the wider screen.
 
 ---
 
+## Experiment 4A – Navigation Using Navigator
+
+In this experiment, I implemented navigation between different screens
+in the Student Campus Companion using the Navigator class in Flutter.
+
+The application was extended from a single dashboard into multiple
+screens for Subjects, Assignments, Timetable, Expenses, Campus Events,
+and Student Profile.
+
+Navigator.push() is used to open a new screen from the Home screen,
+while Navigator.pop() is used to return to the previous screen.
+
+The Quick Access cards and other buttons were made interactive so that
+students can navigate to the corresponding sections of the application.
+
+Each screen displays relevant information for that section and provides
+a Back button to return to the previous screen.
+
+This experiment helped me understand Flutter's navigation system,
+routes, Navigator.push(), Navigator.pop(), and stack-based navigation.
+
+### Experiment 4A Output
+
+The following screenshots demonstrate navigation between different
+screens in the Student Campus Companion using Navigator.
+
+#### Home Screen
+
+The Home screen provides Quick Access cards for navigating to the
+different sections of the application.
+
+![Experiment 4A Home Screen](images/exp_4a_home.png)
+
+#### Subjects Screen
+
+The Subjects card opens the Subjects screen using Navigator.push().
+
+![Experiment 4A Subjects Screen](images/exp_4a_subjects.png)
+
+---
+
 ## Expected Final Application
 
 The following sample image shows the expected design of the Student Campus

@@ -17,6 +17,8 @@ class StudentCampusCompanionApp extends StatelessWidget {
   }
 }
 
+// ================= HOME PAGE =================
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -26,7 +28,9 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Student Campus Companion',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
       ),
@@ -35,22 +39,18 @@ class HomePage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(20),
 
-          // LayoutBuilder checks the available space
           child: LayoutBuilder(
             builder: (context, constraints) {
 
               final availableWidth = constraints.maxWidth;
 
-              // Layout breakpoints
               final isMobile = availableWidth < 600;
-              final isTablet = availableWidth >= 600 &&
-                  availableWidth < 1000;
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  // Welcome section
+                  // Welcome
                   Text(
                     'Hello, Student! 👋',
                     style: TextStyle(
@@ -71,7 +71,7 @@ class HomePage extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  // Student Profile
+                  // Profile section
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(18),
@@ -160,41 +160,51 @@ class HomePage extends StatelessWidget {
 
                   const SizedBox(height: 15),
 
-                  // LayoutBuilder decides the card arrangement
+                  // ================= QUICK ACCESS =================
+
                   if (isMobile)
                     Column(
                       children: [
                         campusCard(
+                          context,
                           Icons.book,
                           'Subjects',
                           '6 Subjects',
+                          const SubjectsPage(),
                         ),
 
                         const SizedBox(height: 12),
 
                         campusCard(
+                          context,
                           Icons.assignment,
                           'Assignments',
                           '5 Pending',
+                          const AssignmentsPage(),
                         ),
 
                         const SizedBox(height: 12),
 
                         campusCard(
+                          context,
                           Icons.schedule,
                           'Timetable',
                           'View Schedule',
+                          const TimetablePage(),
                         ),
 
                         const SizedBox(height: 12),
 
                         campusCard(
+                          context,
                           Icons.account_balance_wallet,
                           'Expenses',
                           '₹2,450',
+                          const ExpensesPage(),
                         ),
                       ],
                     )
+
                   else
                     Column(
                       children: [
@@ -202,9 +212,11 @@ class HomePage extends StatelessWidget {
                           children: [
                             Expanded(
                               child: campusCard(
+                                context,
                                 Icons.book,
                                 'Subjects',
                                 '6 Subjects',
+                                const SubjectsPage(),
                               ),
                             ),
 
@@ -212,9 +224,11 @@ class HomePage extends StatelessWidget {
 
                             Expanded(
                               child: campusCard(
+                                context,
                                 Icons.assignment,
                                 'Assignments',
                                 '5 Pending',
+                                const AssignmentsPage(),
                               ),
                             ),
                           ],
@@ -226,9 +240,11 @@ class HomePage extends StatelessWidget {
                           children: [
                             Expanded(
                               child: campusCard(
+                                context,
                                 Icons.schedule,
                                 'Timetable',
                                 'View Schedule',
+                                const TimetablePage(),
                               ),
                             ),
 
@@ -236,9 +252,11 @@ class HomePage extends StatelessWidget {
 
                             Expanded(
                               child: campusCard(
+                                context,
                                 Icons.account_balance_wallet,
                                 'Expenses',
                                 '₹2,450',
+                                const ExpensesPage(),
                               ),
                             ),
                           ],
@@ -248,6 +266,7 @@ class HomePage extends StatelessWidget {
 
                   const SizedBox(height: 25),
 
+                  // Upcoming Event
                   const Text(
                     'Upcoming Event',
                     style: TextStyle(
@@ -258,7 +277,6 @@ class HomePage extends StatelessWidget {
 
                   const SizedBox(height: 15),
 
-                  // Adaptive event layout
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(20),
@@ -298,7 +316,15 @@ class HomePage extends StatelessWidget {
                               const SizedBox(height: 12),
 
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const EventPage(),
+                                    ),
+                                  );
+                                },
                                 child: const Text('View Event'),
                               ),
                             ],
@@ -336,7 +362,15 @@ class HomePage extends StatelessWidget {
                               ),
 
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const EventPage(),
+                                    ),
+                                  );
+                                },
                                 child: const Text('View Event'),
                               ),
                             ],
@@ -394,43 +428,21 @@ class HomePage extends StatelessWidget {
 
                   Center(
                     child: ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.dashboard),
-                      label: const Text('Explore Campus'),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const ProfilePage(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.person),
+                      label: const Text('View Profile'),
                     ),
                   ),
 
                   const SizedBox(height: 20),
-
-                  // Shows the current LayoutBuilder constraint
-                  Center(
-                    child: Text(
-                      'Available Width: '
-                      '${availableWidth.toStringAsFixed(0)} px',
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 5),
-
-                  Center(
-                    child: Text(
-                      isMobile
-                          ? 'Mobile Layout'
-                          : isTablet
-                              ? 'Tablet Layout'
-                              : 'Desktop Layout',
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 15),
                 ],
               );
             },
@@ -439,94 +451,371 @@ class HomePage extends StatelessWidget {
       ),
 
       bottomNavigationBar: BottomNavigationBar(
-  currentIndex: 0,
+        currentIndex: 0,
 
-  items: const [
-    BottomNavigationBarItem(
-      icon: Icon(Icons.home),
-      label: 'Home',
-    ),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
 
-    BottomNavigationBarItem(
-      icon: Icon(Icons.event),
-      label: 'Events',
-    ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event),
+            label: 'Events',
+          ),
 
-    BottomNavigationBarItem(
-      icon: Icon(Icons.person),
-      label: 'Profile',
-    ),
-  ],
-),
-    );
-  }
-
-  static Widget campusCard(
-    IconData icon,
-    String title,
-    String subtitle,
-  ) {
-    return Container(
-      width: double.infinity,
-      height: 115,
-
-      padding: const EdgeInsets.all(15),
-
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-
-        border: Border.all(
-          color: Colors.grey.shade300,
-        ),
-
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.15),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
       ),
+    );
+  }
 
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+  // ================= REUSABLE CARD =================
 
-        children: [
-          Icon(
-            icon,
-            size: 35,
-            color: Colors.blue,
+  static Widget campusCard(
+    BuildContext context,
+    IconData icon,
+    String title,
+    String subtitle,
+    Widget destination,
+  ) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(18),
+
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => destination,
+          ),
+        );
+      },
+
+      child: Container(
+        width: double.infinity,
+        height: 115,
+
+        padding: const EdgeInsets.all(15),
+
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+
+          border: Border.all(
+            color: Colors.grey.shade300,
           ),
 
-          const SizedBox(width: 15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.15),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
 
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
 
-            crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              icon,
+              size: 35,
+              color: Colors.blue,
+            ),
 
-            children: [
-              Text(
+            const SizedBox(width: 15),
+
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
+
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 4),
+
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ================= SUBJECTS PAGE =================
+
+class SubjectsPage extends StatelessWidget {
+  const SubjectsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const DetailPage(
+      title: 'Subjects',
+      icon: Icons.book,
+      description:
+          'Your current academic subjects are displayed here.',
+      items: [
+        'Data Analytics',
+        'Computer Networks',
+        'Flutter',
+        'DevOps',
+        'Design and Analysis of Algorithms',
+        'Soft Skills',
+      ],
+    );
+  }
+}
+
+// ================= ASSIGNMENTS PAGE =================
+
+class AssignmentsPage extends StatelessWidget {
+  const AssignmentsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const DetailPage(
+      title: 'Assignments',
+      icon: Icons.assignment,
+      description:
+          'View your pending and completed assignments.',
+      items: [
+        'Flutter Lab Assignment',
+        'Data Analytics Assignment',
+        'Computer Networks Assignment',
+        'DevOps Assignment',
+        'DAA Assignment',
+      ],
+    );
+  }
+}
+
+// ================= TIMETABLE PAGE =================
+
+class TimetablePage extends StatelessWidget {
+  const TimetablePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const DetailPage(
+      title: 'Timetable',
+      icon: Icons.schedule,
+      description:
+          'View your daily class timetable and schedule.',
+      items: [
+        '09:00 AM - Data Analytics',
+        '10:00 AM - Computer Networks',
+        '11:00 AM - Flutter Lab',
+        '02:00 PM - DevOps',
+        '03:00 PM - DAA',
+      ],
+    );
+  }
+}
+
+// ================= EXPENSES PAGE =================
+
+class ExpensesPage extends StatelessWidget {
+  const ExpensesPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const DetailPage(
+      title: 'Expenses',
+      icon: Icons.account_balance_wallet,
+      description:
+          'Track your daily campus and personal expenses.',
+      items: [
+        'Food - ₹800',
+        'Transport - ₹500',
+        'Stationery - ₹350',
+        'College Events - ₹400',
+        'Other Expenses - ₹400',
+      ],
+    );
+  }
+}
+
+// ================= EVENT PAGE =================
+
+class EventPage extends StatelessWidget {
+  const EventPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const DetailPage(
+      title: 'Campus Events',
+      icon: Icons.event,
+      description:
+          'Explore upcoming events and activities on campus.',
+      items: [
+        'CSE Technical Fest',
+        'Flutter Workshop',
+        'Hackathon',
+        'Coding Contest',
+      ],
+    );
+  }
+}
+
+// ================= PROFILE PAGE =================
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const DetailPage(
+      title: 'Student Profile',
+      icon: Icons.person,
+      description:
+          'View your student profile information.',
+      items: [
+        'Name: Student',
+        'Course: CSE',
+        'College: ACE Engineering College',
+        'Semester: Current Semester',
+      ],
+    );
+  }
+}
+
+// ================= DETAIL PAGE =================
+
+class DetailPage extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final String description;
+  final List<String> items;
+
+  const DetailPage({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.description,
+    required this.items,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+
+        child: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
+
+          children: [
+            Center(
+              child: Icon(
+                icon,
+                size: 70,
+                color: Colors.blue,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            Center(
+              child: Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
+            ),
 
-              const SizedBox(height: 4),
+            const SizedBox(height: 10),
 
-              Text(
-                subtitle,
+            Center(
+              child: Text(
+                description,
+                textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 12,
                   color: Colors.grey,
+                  fontSize: 15,
                 ),
               ),
-            ],
-          ),
-        ],
+            ),
+
+            const SizedBox(height: 25),
+
+            Expanded(
+              child: ListView.builder(
+                itemCount: items.length,
+
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin:
+                        const EdgeInsets.only(bottom: 12),
+
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        child: Text(
+                          '${index + 1}',
+                        ),
+                      ),
+
+                      title: Text(
+                        items[index],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+
+                      trailing: const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  // Navigator.pop() returns to previous screen
+                  Navigator.pop(context);
+                },
+
+                icon: const Icon(Icons.arrow_back),
+
+                label: const Text(
+                  'Back to Home',
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
