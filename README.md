@@ -241,6 +241,44 @@ The Subjects card opens the Subjects screen using Navigator.push().
 
 ---
 
+## Experiment 4B – User Input and Form Validation
+
+In this experiment, I added user input functionality to the Student Campus Companion.
+
+An expense form was created to allow students to enter an expense title, amount, category, and date.
+
+The form uses TextFormField for entering the expense title and amount. A DropdownButtonFormField is used to select the expense category, and a Date Picker is used to select the expense date.
+
+Form validation was added to check whether the required fields are entered correctly. The amount is also validated to ensure that a valid number greater than zero is entered.
+
+After entering the required details, the user can click the Save Expense button. The entered expense is then added to the Expenses page and the total expense amount is updated.
+
+This experiment helped me understand user input, forms, validation, date selection, dropdown menus, and handling user-entered data in Flutter.
+
+### Experiment 4B Output
+
+The following screenshots demonstrate the user input and expense management functionality implemented in the Student Campus Companion.
+
+#### Add Expense Form
+
+The Add Expense screen allows the student to enter the expense title, amount, category, and date.
+
+![Experiment 4B Add Expense](images/exp_4b_add_expense.png)
+
+#### Date Picker
+
+The Date Picker allows the student to select the date on which the expense occurred.
+
+![Experiment 4B Date Picker](images/exp_4b_date_picker.png)
+
+#### Saved Expense
+
+After entering valid details and clicking the Save Expense button, the expense is displayed on the Expenses page and the total amount is updated.
+
+![Experiment 4B Saved Expense](images/exp_4b_saved_expense.png)
+
+---
+
 ## Expected Final Application
 
 The following sample image shows the expected design of the Student Campus

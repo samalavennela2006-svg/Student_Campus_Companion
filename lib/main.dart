@@ -1,822 +1,1085 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const StudentCampusCompanionApp());
+  runApp(const StudentCampusCompanion());
 }
 
-class StudentCampusCompanionApp extends StatelessWidget {
-  const StudentCampusCompanionApp({super.key});
+class StudentCampusCompanion extends StatelessWidget {
+  const StudentCampusCompanion({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Student Campus Companion',
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
+        scaffoldBackgroundColor: const Color(0xFFFFF7FF),
+        useMaterial3: true,
+      ),
       home: const HomePage(),
     );
   }
 }
 
-// ================= HOME PAGE =================
+// ------------------------------------------------------------
+// HOME PAGE
+// ------------------------------------------------------------
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int selectedIndex = 0;
+
+  final List<Widget> pages = const [
+    HomeDashboard(),
+    EventsPage(),
+    ProfilePage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Student Campus Companion',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
-
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-
-              final availableWidth = constraints.maxWidth;
-
-              final isMobile = availableWidth < 600;
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                  // Welcome
-                  Text(
-                    'Hello, Student! 👋',
-                    style: TextStyle(
-                      fontSize: isMobile ? 26 : 32,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  Text(
-                    'Welcome back to your campus companion.',
-                    style: TextStyle(
-                      fontSize: isMobile ? 14 : 17,
-                      color: Colors.grey,
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Profile section
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(18),
-
-                    decoration: BoxDecoration(
-                      color: Colors.blue.shade50,
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-
-                    child: isMobile
-                        ? const Column(
-                            children: [
-                              CircleAvatar(
-                                radius: 38,
-                                child: Icon(
-                                  Icons.person,
-                                  size: 45,
-                                ),
-                              ),
-
-                              SizedBox(height: 12),
-
-                              Text(
-                                'Student Profile',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              SizedBox(height: 5),
-
-                              Text('CSE - Computer Science'),
-
-                              SizedBox(height: 3),
-
-                              Text('ACE Engineering College'),
-                            ],
-                          )
-                        : const Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 38,
-                                child: Icon(
-                                  Icons.person,
-                                  size: 45,
-                                ),
-                              ),
-
-                              SizedBox(width: 15),
-
-                              Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Student Profile',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-
-                                  SizedBox(height: 5),
-
-                                  Text('CSE - Computer Science'),
-
-                                  SizedBox(height: 3),
-
-                                  Text('ACE Engineering College'),
-                                ],
-                              ),
-                            ],
-                          ),
-                  ),
-
-                  const SizedBox(height: 25),
-
-                  const Text(
-                    'Quick Access',
-                    style: TextStyle(
-                      fontSize: 23,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  const SizedBox(height: 15),
-
-                  // ================= QUICK ACCESS =================
-
-                  if (isMobile)
-                    Column(
-                      children: [
-                        campusCard(
-                          context,
-                          Icons.book,
-                          'Subjects',
-                          '6 Subjects',
-                          const SubjectsPage(),
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        campusCard(
-                          context,
-                          Icons.assignment,
-                          'Assignments',
-                          '5 Pending',
-                          const AssignmentsPage(),
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        campusCard(
-                          context,
-                          Icons.schedule,
-                          'Timetable',
-                          'View Schedule',
-                          const TimetablePage(),
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        campusCard(
-                          context,
-                          Icons.account_balance_wallet,
-                          'Expenses',
-                          '₹2,450',
-                          const ExpensesPage(),
-                        ),
-                      ],
-                    )
-
-                  else
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: campusCard(
-                                context,
-                                Icons.book,
-                                'Subjects',
-                                '6 Subjects',
-                                const SubjectsPage(),
-                              ),
-                            ),
-
-                            const SizedBox(width: 12),
-
-                            Expanded(
-                              child: campusCard(
-                                context,
-                                Icons.assignment,
-                                'Assignments',
-                                '5 Pending',
-                                const AssignmentsPage(),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        Row(
-                          children: [
-                            Expanded(
-                              child: campusCard(
-                                context,
-                                Icons.schedule,
-                                'Timetable',
-                                'View Schedule',
-                                const TimetablePage(),
-                              ),
-                            ),
-
-                            const SizedBox(width: 12),
-
-                            Expanded(
-                              child: campusCard(
-                                context,
-                                Icons.account_balance_wallet,
-                                'Expenses',
-                                '₹2,450',
-                                const ExpensesPage(),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-
-                  const SizedBox(height: 25),
-
-                  // Upcoming Event
-                  const Text(
-                    'Upcoming Event',
-                    style: TextStyle(
-                      fontSize: 23,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  const SizedBox(height: 15),
-
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(20),
-
-                    decoration: BoxDecoration(
-                      color: Colors.orange.shade100,
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-
-                    child: isMobile
-                        ? Column(
-                            crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.event,
-                                size: 45,
-                                color: Colors.deepOrange,
-                              ),
-
-                              const SizedBox(height: 10),
-
-                              const Text(
-                                'CSE Technical Fest',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              const SizedBox(height: 5),
-
-                              const Text(
-                                'Coding • Hackathon • Workshops',
-                              ),
-
-                              const SizedBox(height: 12),
-
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const EventPage(),
-                                    ),
-                                  );
-                                },
-                                child: const Text('View Event'),
-                              ),
-                            ],
-                          )
-                        : Row(
-                            children: [
-                              const Icon(
-                                Icons.event,
-                                size: 50,
-                                color: Colors.deepOrange,
-                              ),
-
-                              const SizedBox(width: 18),
-
-                              const Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'CSE Technical Fest',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-
-                                    SizedBox(height: 5),
-
-                                    Text(
-                                      'Coding • Hackathon • Workshops',
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const EventPage(),
-                                    ),
-                                  );
-                                },
-                                child: const Text('View Event'),
-                              ),
-                            ],
-                          ),
-                  ),
-
-                  const SizedBox(height: 25),
-
-                  // Reminder
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(18),
-
-                    decoration: BoxDecoration(
-                      color: Colors.green.shade50,
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-
-                    child: const Row(
-                      children: [
-                        Icon(
-                          Icons.notifications_active,
-                          size: 36,
-                          color: Colors.green,
-                        ),
-
-                        SizedBox(width: 15),
-
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Today's Reminder",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              SizedBox(height: 5),
-
-                              Text(
-                                'Submit your Flutter Lab assignment.',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 25),
-
-                  Center(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const ProfilePage(),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.person),
-                      label: const Text('View Profile'),
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-                ],
-              );
-            },
-          ),
-        ),
-      ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+      body: pages[selectedIndex],
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: selectedIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
             label: 'Home',
           ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event),
+          NavigationDestination(
+            icon: Icon(Icons.event_outlined),
+            selectedIcon: Icon(Icons.event),
             label: 'Events',
           ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
             label: 'Profile',
           ),
         ],
       ),
     );
   }
+}
 
-  // ================= REUSABLE CARD =================
+// ------------------------------------------------------------
+// HOME DASHBOARD
+// ------------------------------------------------------------
 
-  static Widget campusCard(
-    BuildContext context,
-    IconData icon,
-    String title,
-    String subtitle,
-    Widget destination,
-  ) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(18),
+class HomeDashboard extends StatelessWidget {
+  const HomeDashboard({super.key});
 
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => destination,
-          ),
-        );
-      },
+  void openPage(BuildContext context, Widget page) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => page),
+    );
+  }
 
-      child: Container(
-        width: double.infinity,
-        height: 115,
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
 
-        padding: const EdgeInsets.all(15),
-
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
-
-          border: Border.all(
-            color: Colors.grey.shade300,
-          ),
-
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.15),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
-            ),
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Student Campus Companion',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+      ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          int columns = constraints.maxWidth >= 700 ? 2 : 1;
 
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-
-          children: [
-            Icon(
-              icon,
-              size: 35,
-              color: Colors.blue,
-            ),
-
-            const SizedBox(width: 15),
-
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
-
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
+                const Text(
+                  'Hello, Student! 👋',
+                  style: TextStyle(
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
 
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
 
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    fontSize: 12,
+                const Text(
+                  'Welcome back to your campus companion.',
+                  style: TextStyle(
                     color: Colors.grey,
+                    fontSize: 15,
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                // STUDENT PROFILE
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE1F2FF),
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: screenWidth < 600
+                      ? const Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 32,
+                              backgroundColor: Color(0xFFE8D9FF),
+                              child: Icon(
+                                Icons.person,
+                                size: 38,
+                                color: Colors.deepPurple,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            ProfileText(),
+                          ],
+                        )
+                      : const Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 32,
+                              backgroundColor: Color(0xFFE8D9FF),
+                              child: Icon(
+                                Icons.person,
+                                size: 38,
+                                color: Colors.deepPurple,
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            ProfileText(),
+                          ],
+                        ),
+                ),
+
+                const SizedBox(height: 25),
+
+                const Text(
+                  'Quick Access',
+                  style: TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                // QUICK ACCESS CARDS
+                GridView.count(
+                  crossAxisCount: columns,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: columns == 2 ? 2.8 : 3.2,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    DashboardCard(
+                      icon: Icons.book,
+                      title: 'Subjects',
+                      subtitle: '6 Subjects',
+                      onTap: () {
+                        openPage(context, const SubjectsPage());
+                      },
+                    ),
+                    DashboardCard(
+                      icon: Icons.assignment,
+                      title: 'Assignments',
+                      subtitle: '5 Pending',
+                      onTap: () {
+                        openPage(context, const AssignmentsPage());
+                      },
+                    ),
+                    DashboardCard(
+                      icon: Icons.access_time,
+                      title: 'Timetable',
+                      subtitle: 'View Schedule',
+                      onTap: () {
+                        openPage(context, const TimetablePage());
+                      },
+                    ),
+                    DashboardCard(
+                      icon: Icons.account_balance_wallet,
+                      title: 'Expenses',
+                      subtitle: 'Manage Expenses',
+                      onTap: () {
+                        openPage(context, const ExpensesPage());
+                      },
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 25),
+
+                const Text(
+                  'Upcoming Event',
+                  style: TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFDEAD),
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      if (constraints.maxWidth < 500) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.calendar_month,
+                              size: 40,
+                              color: Colors.deepOrange,
+                            ),
+                            const SizedBox(height: 10),
+                            const Text(
+                              'CSE Technical Fest',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            const Text(
+                              'Coding • Hackathon • Workshops',
+                            ),
+                            const SizedBox(height: 12),
+                            EventButton(
+                              onPressed: () {
+                                openPage(context, const EventsPage());
+                              },
+                            ),
+                          ],
+                        );
+                      }
+
+                      return Row(
+                        children: [
+                          const Icon(
+                            Icons.calendar_month,
+                            size: 40,
+                            color: Colors.deepOrange,
+                          ),
+                          const SizedBox(width: 15),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'CSE Technical Fest',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  'Coding • Hackathon • Workshops',
+                                ),
+                              ],
+                            ),
+                          ),
+                          EventButton(
+                            onPressed: () {
+                              openPage(context, const EventsPage());
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE3F6E8),
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.notifications_active,
+                        color: Colors.green,
+                        size: 30,
+                      ),
+                      SizedBox(width: 15),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Today's Reminder",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              'Submit your Flutter Lab assignment.',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                Center(
+                  child: OutlinedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.apps),
+                    label: const Text('Explore Campus'),
                   ),
                 ),
               ],
             ),
-          ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+// ------------------------------------------------------------
+// PROFILE WIDGET
+// ------------------------------------------------------------
+
+class ProfileText extends StatelessWidget {
+  const ProfileText({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Student Profile',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 5),
+        Text('CSE - Computer Science'),
+        Text('ACE Engineering College'),
+      ],
+    );
+  }
+}
+
+// ------------------------------------------------------------
+// DASHBOARD CARD
+// ------------------------------------------------------------
+
+class DashboardCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const DashboardCard({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(18),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                color: Colors.blue,
+                size: 30,
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      subtitle,
+                      style: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.arrow_forward_ios,
+                size: 15,
+                color: Colors.grey,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-// ================= SUBJECTS PAGE =================
+// ------------------------------------------------------------
+// EVENT BUTTON
+// ------------------------------------------------------------
+
+class EventButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const EventButton({
+    super.key,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      child: const Text('View Event'),
+    );
+  }
+}
+
+// ------------------------------------------------------------
+// SUBJECTS PAGE
+// ------------------------------------------------------------
 
 class SubjectsPage extends StatelessWidget {
   const SubjectsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const DetailPage(
-      title: 'Subjects',
-      icon: Icons.book,
-      description:
-          'Your current academic subjects are displayed here.',
-      items: [
-        'Data Analytics',
-        'Computer Networks',
-        'Flutter',
-        'DevOps',
-        'Design and Analysis of Algorithms',
-        'Soft Skills',
-      ],
+    final subjects = [
+      'Data Analytics',
+      'Computer Networks',
+      'Flutter',
+      'DevOps',
+      'Design and Analysis of Algorithms',
+      'Soft Skills',
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Subjects'),
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(18),
+        itemCount: subjects.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: const Color(0xFFE8D9FF),
+                child: Text('${index + 1}'),
+              ),
+              title: Text(subjects[index]),
+              trailing: const Icon(Icons.chevron_right),
+            ),
+          );
+        },
+      ),
     );
   }
 }
 
-// ================= ASSIGNMENTS PAGE =================
+// ------------------------------------------------------------
+// ASSIGNMENTS PAGE
+// ------------------------------------------------------------
 
 class AssignmentsPage extends StatelessWidget {
   const AssignmentsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const DetailPage(
-      title: 'Assignments',
-      icon: Icons.assignment,
-      description:
-          'View your pending and completed assignments.',
-      items: [
-        'Flutter Lab Assignment',
-        'Data Analytics Assignment',
-        'Computer Networks Assignment',
-        'DevOps Assignment',
-        'DAA Assignment',
-      ],
+    final assignments = [
+      'Data Analytics Assignment',
+      'Computer Networks Seminar',
+      'Flutter Lab',
+      'DevOps Assignment',
+      'DAA Practice',
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Assignments'),
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(18),
+        itemCount: assignments.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: ListTile(
+              leading: const Icon(
+                Icons.assignment,
+                color: Colors.blue,
+              ),
+              title: Text(assignments[index]),
+              subtitle: const Text('Pending'),
+              trailing: const Icon(Icons.chevron_right),
+            ),
+          );
+        },
+      ),
     );
   }
 }
 
-// ================= TIMETABLE PAGE =================
+// ------------------------------------------------------------
+// TIMETABLE PAGE
+// ------------------------------------------------------------
 
 class TimetablePage extends StatelessWidget {
   const TimetablePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const DetailPage(
-      title: 'Timetable',
-      icon: Icons.schedule,
-      description:
-          'View your daily class timetable and schedule.',
-      items: [
-        '09:00 AM - Data Analytics',
-        '10:00 AM - Computer Networks',
-        '11:00 AM - Flutter Lab',
-        '02:00 PM - DevOps',
-        '03:00 PM - DAA',
-      ],
+    final timetable = [
+      ['09:00 AM', 'Data Analytics'],
+      ['10:00 AM', 'Computer Networks'],
+      ['11:00 AM', 'Flutter'],
+      ['01:30 PM', 'DevOps'],
+      ['02:30 PM', 'DAA'],
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Timetable'),
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(18),
+        itemCount: timetable.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: ListTile(
+              leading: const Icon(
+                Icons.access_time,
+                color: Colors.blue,
+              ),
+              title: Text(timetable[index][1]),
+              subtitle: Text(timetable[index][0]),
+            ),
+          );
+        },
+      ),
     );
   }
 }
 
-// ================= EXPENSES PAGE =================
+// ------------------------------------------------------------
+// EXPENSES PAGE - 4B
+// ------------------------------------------------------------
 
-class ExpensesPage extends StatelessWidget {
+class Expense {
+  final String title;
+  final double amount;
+  final String category;
+  final DateTime date;
+
+  Expense({
+    required this.title,
+    required this.amount,
+    required this.category,
+    required this.date,
+  });
+}
+
+class ExpensesPage extends StatefulWidget {
   const ExpensesPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const DetailPage(
-      title: 'Expenses',
-      icon: Icons.account_balance_wallet,
-      description:
-          'Track your daily campus and personal expenses.',
-      items: [
-        'Food - ₹800',
-        'Transport - ₹500',
-        'Stationery - ₹350',
-        'College Events - ₹400',
-        'Other Expenses - ₹400',
-      ],
-    );
-  }
+  State<ExpensesPage> createState() => _ExpensesPageState();
 }
 
-// ================= EVENT PAGE =================
+class _ExpensesPageState extends State<ExpensesPage> {
+  final List<Expense> expenses = [
+    Expense(
+      title: 'College Bus',
+      amount: 500,
+      category: 'Transport',
+      date: DateTime(2026, 9, 25),
+    ),
+    Expense(
+      title: 'Lunch',
+      amount: 250,
+      category: 'Food',
+      date: DateTime(2026, 9, 26),
+    ),
+  ];
 
-class EventPage extends StatelessWidget {
-  const EventPage({super.key});
+  void openAddExpensePage() async {
+    final Expense? newExpense = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const AddExpensePage(),
+      ),
+    );
+
+    if (newExpense != null) {
+      setState(() {
+        expenses.add(newExpense);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const DetailPage(
-      title: 'Campus Events',
-      icon: Icons.event,
-      description:
-          'Explore upcoming events and activities on campus.',
-      items: [
-        'CSE Technical Fest',
-        'Flutter Workshop',
-        'Hackathon',
-        'Coding Contest',
-      ],
+    double total = 0;
+
+    for (final expense in expenses) {
+      total += expense.amount;
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Expenses'),
+      ),
+      body: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: const Color(0xFFE8D9FF),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Column(
+              children: [
+                const Text(
+                  'Total Expenses',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  '₹${total.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Expanded(
+            child: expenses.isEmpty
+                ? const Center(
+                    child: Text('No expenses added yet.'),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    itemCount: expenses.length,
+                    itemBuilder: (context, index) {
+                      final expense = expenses[index];
+
+                      return Card(
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.blue.shade50,
+                            child: const Icon(
+                              Icons.currency_rupee,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          title: Text(
+                            expense.title,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Text(
+                            '${expense.category} • ${formatDate(expense.date)}',
+                          ),
+                          trailing: Text(
+                            '₹${expense.amount.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: openAddExpensePage,
+        icon: const Icon(Icons.add),
+        label: const Text('Add Expense'),
+      ),
     );
   }
 }
 
-// ================= PROFILE PAGE =================
+// ------------------------------------------------------------
+// ADD EXPENSE PAGE - 4B
+// ------------------------------------------------------------
+
+class AddExpensePage extends StatefulWidget {
+  const AddExpensePage({super.key});
+
+  @override
+  State<AddExpensePage> createState() => _AddExpensePageState();
+}
+
+class _AddExpensePageState extends State<AddExpensePage> {
+  final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController amountController = TextEditingController();
+
+  String selectedCategory = 'Food';
+
+  DateTime selectedDate = DateTime.now();
+
+  final List<String> categories = [
+    'Food',
+    'Transport',
+    'Education',
+    'Shopping',
+    'Entertainment',
+    'Other',
+  ];
+
+  Future<void> selectDate() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2035),
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    }
+  }
+
+  void saveExpense() {
+    if (_formKey.currentState!.validate()) {
+      final expense = Expense(
+        title: titleController.text.trim(),
+        amount: double.parse(amountController.text.trim()),
+        category: selectedCategory,
+        date: selectedDate,
+      );
+
+      Navigator.pop(context, expense);
+    }
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    amountController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add Expense'),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Add New Expense',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              const Text(
+                'Enter the details of your expense below.',
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              // TITLE
+              TextFormField(
+                controller: titleController,
+                decoration: const InputDecoration(
+                  labelText: 'Expense Title',
+                  hintText: 'Example: Lunch',
+                  prefixIcon: Icon(Icons.title),
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter an expense title';
+                  }
+
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 18),
+
+              // AMOUNT
+              TextFormField(
+                controller: amountController,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                decoration: const InputDecoration(
+                  labelText: 'Amount',
+                  hintText: 'Example: 250',
+                  prefixIcon: Icon(Icons.currency_rupee),
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter an amount';
+                  }
+
+                  final amount = double.tryParse(value.trim());
+
+                  if (amount == null) {
+                    return 'Please enter a valid number';
+                  }
+
+                  if (amount <= 0) {
+                    return 'Amount must be greater than zero';
+                  }
+
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 18),
+
+              // CATEGORY
+              DropdownButtonFormField<String>(
+                initialValue: selectedCategory,
+                decoration: const InputDecoration(
+                  labelText: 'Category',
+                  prefixIcon: Icon(Icons.category),
+                  border: OutlineInputBorder(),
+                ),
+                items: categories.map((category) {
+                  return DropdownMenuItem(
+                    value: category,
+                    child: Text(category),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      selectedCategory = value;
+                    });
+                  }
+                },
+              ),
+
+              const SizedBox(height: 18),
+
+              // DATE PICKER
+              InkWell(
+                onTap: selectDate,
+                child: InputDecorator(
+                  decoration: const InputDecoration(
+                    labelText: 'Date',
+                    prefixIcon: Icon(Icons.calendar_month),
+                    border: OutlineInputBorder(),
+                  ),
+                  child: Text(
+                    formatDate(selectedDate),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              // SAVE BUTTON
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton.icon(
+                  onPressed: saveExpense,
+                  icon: const Icon(Icons.save),
+                  label: const Text(
+                    'Save Expense',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ------------------------------------------------------------
+// EVENTS PAGE
+// ------------------------------------------------------------
+
+class EventsPage extends StatelessWidget {
+  const EventsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Campus Events'),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(18),
+        children: const [
+          Card(
+            child: ListTile(
+              leading: Icon(
+                Icons.calendar_month,
+                color: Colors.deepOrange,
+              ),
+              title: Text('CSE Technical Fest'),
+              subtitle: Text(
+                'Coding • Hackathon • Workshops',
+              ),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              leading: Icon(
+                Icons.school,
+                color: Colors.blue,
+              ),
+              title: Text('Workshop on Flutter'),
+              subtitle: Text(
+                'Learn Flutter development basics.',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ------------------------------------------------------------
+// PROFILE PAGE
+// ------------------------------------------------------------
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const DetailPage(
-      title: 'Student Profile',
-      icon: Icons.person,
-      description:
-          'View your student profile information.',
-      items: [
-        'Name: Student',
-        'Course: CSE',
-        'College: ACE Engineering College',
-        'Semester: Current Semester',
-      ],
-    );
-  }
-}
-
-// ================= DETAIL PAGE =================
-
-class DetailPage extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  final String description;
-  final List<String> items;
-
-  const DetailPage({
-    super.key,
-    required this.title,
-    required this.icon,
-    required this.description,
-    required this.items,
-  });
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: const Text('Profile'),
       ),
-
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-
+      body: Center(
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
-
-          children: [
-            Center(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            CircleAvatar(
+              radius: 50,
+              backgroundColor: Color(0xFFE8D9FF),
               child: Icon(
-                icon,
-                size: 70,
-                color: Colors.blue,
+                Icons.person,
+                size: 60,
+                color: Colors.deepPurple,
               ),
             ),
-
-            const SizedBox(height: 20),
-
-            Center(
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
+            SizedBox(height: 15),
+            Text(
+              'Student',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
               ),
             ),
-
-            const SizedBox(height: 10),
-
-            Center(
-              child: Text(
-                description,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 15,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 25),
-
-            Expanded(
-              child: ListView.builder(
-                itemCount: items.length,
-
-                itemBuilder: (context, index) {
-                  return Card(
-                    margin:
-                        const EdgeInsets.only(bottom: 12),
-
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        child: Text(
-                          '${index + 1}',
-                        ),
-                      ),
-
-                      title: Text(
-                        items[index],
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-
-                      trailing: const Icon(
-                        Icons.arrow_forward_ios,
-                        size: 16,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            Center(
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  // Navigator.pop() returns to previous screen
-                  Navigator.pop(context);
-                },
-
-                icon: const Icon(Icons.arrow_back),
-
-                label: const Text(
-                  'Back to Home',
-                ),
-              ),
-            ),
+            SizedBox(height: 5),
+            Text('CSE - Computer Science'),
+            Text('ACE Engineering College'),
           ],
         ),
       ),
     );
   }
+}
+
+// ------------------------------------------------------------
+// HELPER FUNCTION
+// ------------------------------------------------------------
+
+String formatDate(DateTime date) {
+  return '${date.day.toString().padLeft(2, '0')}/'
+      '${date.month.toString().padLeft(2, '0')}/'
+      '${date.year}';
 }
