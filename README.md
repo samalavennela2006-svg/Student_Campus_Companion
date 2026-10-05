@@ -382,6 +382,36 @@ expense list and total amount using Provider and notifyListeners().
 
 ---
 
+## Experiment 6A – Custom Widgets and Theme
+
+In this experiment, I improved the structure and styling of the Student
+Campus Companion by creating reusable custom widgets and applying a
+common Flutter theme.
+
+Reusable custom widgets such as `SectionTitle`, `CampusInfoCard`, and
+`CampusEventCard` were created to avoid repeating the same UI code in
+different parts of the application.
+
+`ThemeData` was also used to define common styling for the application,
+including the AppBar, Cards, ElevatedButtons, and input fields.
+
+The Home screen was updated to use the reusable `CampusInfoCard` widget
+for Subjects, Assignments, Timetable, and Expenses.
+
+This experiment helped me understand how custom widgets improve code
+reusability, modularity, readability, and maintainability. It also helped
+me understand how themes can be used to maintain a consistent appearance
+throughout a Flutter application.
+
+### Experiment 6A Output
+
+The following screenshot shows the Student Campus Companion after
+implementing reusable custom widgets and the application theme.
+
+![Experiment 6A Output](images/exp_6a_output.png)
+
+---
+
 ## Expected Final Application
 
 The following sample image shows the expected design of the Student Campus
