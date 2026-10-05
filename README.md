@@ -279,6 +279,58 @@ After entering valid details and clicking the Save Expense button, the expense i
 
 ---
 
+## Experiment 5A – Stateful and Stateless Widgets
+
+In this experiment, I learned the difference between StatefulWidget and
+StatelessWidget and implemented state management using Flutter's
+setState() method.
+
+Stateless widgets were used for UI components whose values do not change,
+such as the student profile and quick-access cards.
+
+Stateful widgets were used for components whose data can change during
+runtime. The Home screen uses setState() to update the Today's Reminder
+when it is marked as completed.
+
+The Assignments screen uses setState() to update the completion status of
+assignments. When an assignment is marked as completed, its icon and text
+are updated immediately.
+
+The Expenses screen also uses setState() to update the expense list and
+total amount when a new expense is added.
+
+This experiment helped me understand how StatefulWidget, StatelessWidget,
+and setState() are used to manage changing data and update the Flutter
+user interface dynamically.
+
+### Experiment 5A Output
+
+The following screenshots demonstrate the state changes implemented using
+StatefulWidget and setState().
+
+#### Today's Reminder State Change
+
+The reminder changes from pending to completed when the user taps on it.
+The UI updates immediately without restarting the application.
+
+![Experiment 5A Reminder](images/exp_5a_reminder.png)
+
+#### Assignment State Change
+
+The assignment status changes when the checkbox is selected. The completed
+assignment is displayed with a completed icon and strikethrough text.
+
+![Experiment 5A Assignment](images/exp_5a_assignment.png)
+
+#### Expense State Change
+
+After adding a new expense, the expense list and total expense amount are
+updated automatically using setState().
+
+![Experiment 5A Expense](images/exp_5a_expense.png)
+
+---
+
 ## Expected Final Application
 
 The following sample image shows the expected design of the Student Campus

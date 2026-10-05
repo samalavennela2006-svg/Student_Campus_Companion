@@ -4,6 +4,10 @@ void main() {
   runApp(const StudentCampusCompanion());
 }
 
+// ============================================================
+// APP
+// ============================================================
+
 class StudentCampusCompanion extends StatelessWidget {
   const StudentCampusCompanion({super.key});
 
@@ -13,86 +17,41 @@ class StudentCampusCompanion extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Student Campus Companion',
       theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        scaffoldBackgroundColor: const Color(0xFFFFF7FF),
         useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+        ),
+        scaffoldBackgroundColor: const Color(0xFFFFF8FF),
       ),
-      home: const HomePage(),
+      home: const HomeScreen(),
     );
   }
 }
 
-// ------------------------------------------------------------
-// HOME PAGE
-// ------------------------------------------------------------
+// ============================================================
+// HOME SCREEN - STATEFUL WIDGET
+// ============================================================
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int selectedIndex = 0;
-
-  final List<Widget> pages = const [
-    HomeDashboard(),
-    EventsPage(),
-    ProfilePage(),
-  ];
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: pages[selectedIndex],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.event_outlined),
-            selectedIcon: Icon(Icons.event),
-            label: 'Events',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
-    );
-  }
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-// ------------------------------------------------------------
-// HOME DASHBOARD
-// ------------------------------------------------------------
+class _HomeScreenState extends State<HomeScreen> {
+  // 5A: State variable
+  bool reminderCompleted = false;
 
-class HomeDashboard extends StatelessWidget {
-  const HomeDashboard({super.key});
-
-  void openPage(BuildContext context, Widget page) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => page),
-    );
+  // 5A: setState() changes the UI
+  void toggleReminder() {
+    setState(() {
+      reminderCompleted = !reminderCompleted;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -100,17 +59,19 @@ class HomeDashboard extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
       ),
+
       body: LayoutBuilder(
         builder: (context, constraints) {
-          int columns = constraints.maxWidth >= 700 ? 2 : 1;
+          final isWide = constraints.maxWidth >= 700;
 
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                // Welcome
                 const Text(
                   'Hello, Student! 👋',
                   style: TextStyle(
@@ -121,17 +82,17 @@ class HomeDashboard extends StatelessWidget {
 
                 const SizedBox(height: 6),
 
-                const Text(
+                Text(
                   'Welcome back to your campus companion.',
                   style: TextStyle(
-                    color: Colors.grey,
+                    color: Colors.grey.shade600,
                     fontSize: 15,
                   ),
                 ),
 
                 const SizedBox(height: 20),
 
-                // STUDENT PROFILE
+                // Student Profile
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(18),
@@ -139,40 +100,24 @@ class HomeDashboard extends StatelessWidget {
                     color: const Color(0xFFE1F2FF),
                     borderRadius: BorderRadius.circular(18),
                   ),
-                  child: screenWidth < 600
-                      ? const Column(
+                  child: isWide
+                      ? const Row(
                           children: [
-                            CircleAvatar(
-                              radius: 32,
-                              backgroundColor: Color(0xFFE8D9FF),
-                              child: Icon(
-                                Icons.person,
-                                size: 38,
-                                color: Colors.deepPurple,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            ProfileText(),
+                            ProfileIcon(),
+                            SizedBox(width: 16),
+                            ProfileInformation(),
                           ],
                         )
-                      : const Row(
+                      : const Column(
                           children: [
-                            CircleAvatar(
-                              radius: 32,
-                              backgroundColor: Color(0xFFE8D9FF),
-                              child: Icon(
-                                Icons.person,
-                                size: 38,
-                                color: Colors.deepPurple,
-                              ),
-                            ),
-                            SizedBox(width: 16),
-                            ProfileText(),
+                            ProfileIcon(),
+                            SizedBox(height: 10),
+                            ProfileInformation(),
                           ],
                         ),
                 ),
 
-                const SizedBox(height: 25),
+                const SizedBox(height: 24),
 
                 const Text(
                   'Quick Access',
@@ -184,52 +129,76 @@ class HomeDashboard extends StatelessWidget {
 
                 const SizedBox(height: 12),
 
-                // QUICK ACCESS CARDS
+                // Quick Access Cards
                 GridView.count(
-                  crossAxisCount: columns,
+                  crossAxisCount: isWide ? 2 : 1,
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
-                  childAspectRatio: columns == 2 ? 2.8 : 3.2,
+                  childAspectRatio: isWide ? 3.8 : 3.4,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    DashboardCard(
+                    FeatureCard(
                       icon: Icons.book,
                       title: 'Subjects',
                       subtitle: '6 Subjects',
                       onTap: () {
-                        openPage(context, const SubjectsPage());
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const SubjectsScreen(),
+                          ),
+                        );
                       },
                     ),
-                    DashboardCard(
+
+                    FeatureCard(
                       icon: Icons.assignment,
                       title: 'Assignments',
                       subtitle: '5 Pending',
                       onTap: () {
-                        openPage(context, const AssignmentsPage());
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const AssignmentsScreen(),
+                          ),
+                        );
                       },
                     ),
-                    DashboardCard(
+
+                    FeatureCard(
                       icon: Icons.access_time,
                       title: 'Timetable',
                       subtitle: 'View Schedule',
                       onTap: () {
-                        openPage(context, const TimetablePage());
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const TimetableScreen(),
+                          ),
+                        );
                       },
                     ),
-                    DashboardCard(
+
+                    FeatureCard(
                       icon: Icons.account_balance_wallet,
                       title: 'Expenses',
-                      subtitle: 'Manage Expenses',
+                      subtitle: '₹2,450',
                       onTap: () {
-                        openPage(context, const ExpensesPage());
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const ExpensesScreen(),
+                          ),
+                        );
                       },
                     ),
                   ],
                 ),
 
-                const SizedBox(height: 25),
+                const SizedBox(height: 24),
 
+                // Upcoming Event
                 const Text(
                   'Upcoming Event',
                   style: TextStyle(
@@ -244,123 +213,119 @@ class HomeDashboard extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFDEAD),
+                    color: const Color(0xFFFFDFAB),
                     borderRadius: BorderRadius.circular(18),
                   ),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      if (constraints.maxWidth < 500) {
-                        return Column(
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.calendar_month,
+                        size: 38,
+                        color: Colors.deepOrange,
+                      ),
+                      const SizedBox(width: 15),
+
+                      const Expanded(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Icon(
-                              Icons.calendar_month,
-                              size: 40,
-                              color: Colors.deepOrange,
-                            ),
-                            const SizedBox(height: 10),
-                            const Text(
+                            Text(
                               'CSE Technical Fest',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 5),
-                            const Text(
-                              'Coding • Hackathon • Workshops',
-                            ),
-                            const SizedBox(height: 12),
-                            EventButton(
-                              onPressed: () {
-                                openPage(context, const EventsPage());
-                              },
-                            ),
-                          ],
-                        );
-                      }
-
-                      return Row(
-                        children: [
-                          const Icon(
-                            Icons.calendar_month,
-                            size: 40,
-                            color: Colors.deepOrange,
-                          ),
-                          const SizedBox(width: 15),
-                          const Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'CSE Technical Fest',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  'Coding • Hackathon • Workshops',
-                                ),
-                              ],
-                            ),
-                          ),
-                          EventButton(
-                            onPressed: () {
-                              openPage(context, const EventsPage());
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(18),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE3F6E8),
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: const Row(
-                    children: [
-                      Icon(
-                        Icons.notifications_active,
-                        color: Colors.green,
-                        size: 30,
-                      ),
-                      SizedBox(width: 15),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Today's Reminder",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
                             SizedBox(height: 5),
                             Text(
-                              'Submit your Flutter Lab assignment.',
+                              'Coding • Hackathon • Workshops',
                             ),
                           ],
                         ),
                       ),
+
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const EventsScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text('View Event'),
+                      ),
                     ],
+                  ),
+                ),
+
+                const SizedBox(height: 18),
+
+                // 5A STATE CHANGE
+                GestureDetector(
+                  onTap: toggleReminder,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: reminderCompleted
+                          ? const Color(0xFFD5F5D5)
+                          : const Color(0xFFE5F6E8),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          reminderCompleted
+                              ? Icons.check_circle
+                              : Icons.notifications_active,
+                          color: Colors.green.shade700,
+                          size: 32,
+                        ),
+
+                        const SizedBox(width: 14),
+
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                reminderCompleted
+                                    ? "Today's Reminder Completed"
+                                    : "Today's Reminder",
+                                style: const TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                reminderCompleted
+                                    ? 'Great! Your task is completed.'
+                                    : 'Submit your Flutter Lab assignment.',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
 
                 const SizedBox(height: 20),
 
                 Center(
-                  child: OutlinedButton.icon(
-                    onPressed: () {},
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const EventsScreen(),
+                        ),
+                      );
+                    },
                     icon: const Icon(Icons.apps),
                     label: const Text('Explore Campus'),
                   ),
@@ -370,16 +335,51 @@ class HomeDashboard extends StatelessWidget {
           );
         },
       ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event),
+            label: 'Events',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
     );
   }
 }
 
-// ------------------------------------------------------------
-// PROFILE WIDGET
-// ------------------------------------------------------------
+// ============================================================
+// PROFILE WIDGETS - STATELESS WIDGETS
+// ============================================================
 
-class ProfileText extends StatelessWidget {
-  const ProfileText({super.key});
+class ProfileIcon extends StatelessWidget {
+  const ProfileIcon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      radius: 32,
+      backgroundColor: const Color(0xFFEAD9FF),
+      child: Icon(
+        Icons.person,
+        size: 36,
+        color: Colors.deepPurple.shade700,
+      ),
+    );
+  }
+}
+
+class ProfileInformation extends StatelessWidget {
+  const ProfileInformation({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -395,23 +395,24 @@ class ProfileText extends StatelessWidget {
         ),
         SizedBox(height: 5),
         Text('CSE - Computer Science'),
+        SizedBox(height: 3),
         Text('ACE Engineering College'),
       ],
     );
   }
 }
 
-// ------------------------------------------------------------
-// DASHBOARD CARD
-// ------------------------------------------------------------
+// ============================================================
+// FEATURE CARD - STATELESS
+// ============================================================
 
-class DashboardCard extends StatelessWidget {
+class FeatureCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
   final VoidCallback onTap;
 
-  const DashboardCard({
+  const FeatureCard({
     super.key,
     required this.icon,
     required this.title,
@@ -423,11 +424,8 @@ class DashboardCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-      ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(18),
@@ -435,36 +433,29 @@ class DashboardCard extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: Colors.blue,
                 size: 30,
+                color: Colors.blue,
               ),
-              const SizedBox(width: 15),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+              const SizedBox(width: 16),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 5),
-                    Text(
-                      subtitle,
-                      style: const TextStyle(
-                        color: Colors.grey,
-                      ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
                     ),
-                  ],
-                ),
-              ),
-              const Icon(
-                Icons.arrow_forward_ios,
-                size: 15,
-                color: Colors.grey,
+                  ),
+                ],
               ),
             ],
           ),
@@ -474,57 +465,35 @@ class DashboardCard extends StatelessWidget {
   }
 }
 
-// ------------------------------------------------------------
-// EVENT BUTTON
-// ------------------------------------------------------------
+// ============================================================
+// SUBJECTS SCREEN
+// ============================================================
 
-class EventButton extends StatelessWidget {
-  final VoidCallback onPressed;
+class SubjectsScreen extends StatelessWidget {
+  const SubjectsScreen({super.key});
 
-  const EventButton({
-    super.key,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return OutlinedButton(
-      onPressed: onPressed,
-      child: const Text('View Event'),
-    );
-  }
-}
-
-// ------------------------------------------------------------
-// SUBJECTS PAGE
-// ------------------------------------------------------------
-
-class SubjectsPage extends StatelessWidget {
-  const SubjectsPage({super.key});
+  final List<String> subjects = const [
+    'Data Analytics',
+    'Computer Networks',
+    'Flutter',
+    'DevOps',
+    'Design and Analysis of Algorithms',
+    'Soft Skills',
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final subjects = [
-      'Data Analytics',
-      'Computer Networks',
-      'Flutter',
-      'DevOps',
-      'Design and Analysis of Algorithms',
-      'Soft Skills',
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Subjects'),
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(16),
         itemCount: subjects.length,
         itemBuilder: (context, index) {
           return Card(
             child: ListTile(
               leading: CircleAvatar(
-                backgroundColor: const Color(0xFFE8D9FF),
                 child: Text('${index + 1}'),
               ),
               title: Text(subjects[index]),
@@ -537,40 +506,86 @@ class SubjectsPage extends StatelessWidget {
   }
 }
 
-// ------------------------------------------------------------
-// ASSIGNMENTS PAGE
-// ------------------------------------------------------------
+// ============================================================
+// ASSIGNMENTS SCREEN - STATEFUL
+// ============================================================
 
-class AssignmentsPage extends StatelessWidget {
-  const AssignmentsPage({super.key});
+class AssignmentsScreen extends StatefulWidget {
+  const AssignmentsScreen({super.key});
+
+  @override
+  State<AssignmentsScreen> createState() =>
+      _AssignmentsScreenState();
+}
+
+class _AssignmentsScreenState extends State<AssignmentsScreen> {
+  final List<Map<String, dynamic>> assignments = [
+    {
+      'title': 'DAA Assignment 1',
+      'subject': 'Design and Analysis of Algorithms',
+      'completed': false,
+    },
+    {
+      'title': 'DBMS Assignment 2',
+      'subject': 'Database Management Systems',
+      'completed': false,
+    },
+    {
+      'title': 'CN Assignment 1',
+      'subject': 'Computer Networks',
+      'completed': false,
+    },
+    {
+      'title': 'Flutter Assignment 1',
+      'subject': 'Flutter',
+      'completed': false,
+    },
+  ];
+
+  void toggleAssignment(int index) {
+    setState(() {
+      assignments[index]['completed'] =
+          !assignments[index]['completed'];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final assignments = [
-      'Data Analytics Assignment',
-      'Computer Networks Seminar',
-      'Flutter Lab',
-      'DevOps Assignment',
-      'DAA Practice',
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Assignments'),
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(16),
         itemCount: assignments.length,
         itemBuilder: (context, index) {
+          final assignment = assignments[index];
+
           return Card(
             child: ListTile(
-              leading: const Icon(
-                Icons.assignment,
-                color: Colors.blue,
+              leading: Icon(
+                assignment['completed']
+                    ? Icons.check_circle
+                    : Icons.assignment,
+                color: assignment['completed']
+                    ? Colors.green
+                    : Colors.blue,
               ),
-              title: Text(assignments[index]),
-              subtitle: const Text('Pending'),
-              trailing: const Icon(Icons.chevron_right),
+              title: Text(
+                assignment['title'],
+                style: TextStyle(
+                  decoration: assignment['completed']
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                ),
+              ),
+              subtitle: Text(assignment['subject']),
+              trailing: Checkbox(
+                value: assignment['completed'],
+                onChanged: (_) {
+                  toggleAssignment(index);
+                },
+              ),
             ),
           );
         },
@@ -579,123 +594,83 @@ class AssignmentsPage extends StatelessWidget {
   }
 }
 
-// ------------------------------------------------------------
-// TIMETABLE PAGE
-// ------------------------------------------------------------
+// ============================================================
+// EXPENSES SCREEN - STATEFUL
+// ============================================================
 
-class TimetablePage extends StatelessWidget {
-  const TimetablePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final timetable = [
-      ['09:00 AM', 'Data Analytics'],
-      ['10:00 AM', 'Computer Networks'],
-      ['11:00 AM', 'Flutter'],
-      ['01:30 PM', 'DevOps'],
-      ['02:30 PM', 'DAA'],
-    ];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Timetable'),
-      ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(18),
-        itemCount: timetable.length,
-        itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              leading: const Icon(
-                Icons.access_time,
-                color: Colors.blue,
-              ),
-              title: Text(timetable[index][1]),
-              subtitle: Text(timetable[index][0]),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-// ------------------------------------------------------------
-// EXPENSES PAGE - 4B
-// ------------------------------------------------------------
-
-class Expense {
-  final String title;
-  final double amount;
-  final String category;
-  final DateTime date;
-
-  Expense({
-    required this.title,
-    required this.amount,
-    required this.category,
-    required this.date,
-  });
-}
-
-class ExpensesPage extends StatefulWidget {
-  const ExpensesPage({super.key});
+class ExpensesScreen extends StatefulWidget {
+  const ExpensesScreen({super.key});
 
   @override
-  State<ExpensesPage> createState() => _ExpensesPageState();
+  State<ExpensesScreen> createState() => _ExpensesScreenState();
 }
 
-class _ExpensesPageState extends State<ExpensesPage> {
-  final List<Expense> expenses = [
-    Expense(
-      title: 'College Bus',
-      amount: 500,
-      category: 'Transport',
-      date: DateTime(2026, 9, 25),
-    ),
-    Expense(
-      title: 'Lunch',
-      amount: 250,
-      category: 'Food',
-      date: DateTime(2026, 9, 26),
-    ),
+class _ExpensesScreenState extends State<ExpensesScreen> {
+  final List<Map<String, dynamic>> expenses = [
+    {
+      'title': 'Food',
+      'amount': 1200.0,
+      'category': 'Food',
+      'date': '10 Sep 2026',
+    },
+    {
+      'title': 'Transport',
+      'amount': 600.0,
+      'category': 'Transport',
+      'date': '08 Sep 2026',
+    },
+    {
+      'title': 'Books',
+      'amount': 800.0,
+      'category': 'Education',
+      'date': '05 Sep 2026',
+    },
   ];
 
-  void openAddExpensePage() async {
-    final Expense? newExpense = await Navigator.push(
+  double get totalExpenses {
+    return expenses.fold(
+      0.0,
+      (sum, item) => sum + item['amount'],
+    );
+  }
+
+  Future<void> addExpense() async {
+    final result = await Navigator.push<Map<String, dynamic>>(
       context,
       MaterialPageRoute(
-        builder: (context) => const AddExpensePage(),
+        builder: (_) => const AddExpenseScreen(),
       ),
     );
 
-    if (newExpense != null) {
+    if (result != null) {
+      // 5A: setState updates the expense list and total
       setState(() {
-        expenses.add(newExpense);
+        expenses.add(result);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    double total = 0;
-
-    for (final expense in expenses) {
-      total += expense.amount;
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expenses'),
+        actions: [
+          IconButton(
+            onPressed: addExpense,
+            icon: const Icon(Icons.add),
+          ),
+        ],
       ),
+
       body: Column(
         children: [
           Container(
             width: double.infinity,
-            margin: const EdgeInsets.all(18),
+            margin: const EdgeInsets.all(16),
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: const Color(0xFFE8D9FF),
+              color: const Color(0xFFE2F2FF),
               borderRadius: BorderRadius.circular(18),
             ),
             child: Column(
@@ -703,14 +678,15 @@ class _ExpensesPageState extends State<ExpensesPage> {
                 const Text(
                   'Total Expenses',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 8),
                 Text(
-                  '₹${total.toStringAsFixed(2)}',
+                  '₹${totalExpenses.toStringAsFixed(0)}',
                   style: const TextStyle(
-                    fontSize: 28,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -724,31 +700,26 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     child: Text('No expenses added yet.'),
                   )
                 : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                    ),
                     itemCount: expenses.length,
                     itemBuilder: (context, index) {
                       final expense = expenses[index];
 
                       return Card(
                         child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.blue.shade50,
-                            child: const Icon(
-                              Icons.currency_rupee,
-                              color: Colors.blue,
+                          leading: const CircleAvatar(
+                            child: Icon(
+                              Icons.account_balance_wallet,
                             ),
                           ),
-                          title: Text(
-                            expense.title,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          title: Text(expense['title']),
                           subtitle: Text(
-                            '${expense.category} • ${formatDate(expense.date)}',
+                            '${expense['category']} • ${expense['date']}',
                           ),
                           trailing: Text(
-                            '₹${expense.amount.toStringAsFixed(2)}',
+                            '₹${expense['amount'].toStringAsFixed(0)}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -760,8 +731,9 @@ class _ExpensesPageState extends State<ExpensesPage> {
           ),
         ],
       ),
+
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: openAddExpensePage,
+        onPressed: addExpense,
         icon: const Icon(Icons.add),
         label: const Text('Add Expense'),
       ),
@@ -769,42 +741,41 @@ class _ExpensesPageState extends State<ExpensesPage> {
   }
 }
 
-// ------------------------------------------------------------
-// ADD EXPENSE PAGE - 4B
-// ------------------------------------------------------------
+// ============================================================
+// ADD EXPENSE SCREEN
+// ============================================================
 
-class AddExpensePage extends StatefulWidget {
-  const AddExpensePage({super.key});
+class AddExpenseScreen extends StatefulWidget {
+  const AddExpenseScreen({super.key});
 
   @override
-  State<AddExpensePage> createState() => _AddExpensePageState();
+  State<AddExpenseScreen> createState() =>
+      _AddExpenseScreenState();
 }
 
-class _AddExpensePageState extends State<AddExpensePage> {
-  final _formKey = GlobalKey<FormState>();
+class _AddExpenseScreenState extends State<AddExpenseScreen> {
+  final formKey = GlobalKey<FormState>();
 
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController amountController = TextEditingController();
+  final titleController = TextEditingController();
+  final amountController = TextEditingController();
 
   String selectedCategory = 'Food';
-
   DateTime selectedDate = DateTime.now();
 
   final List<String> categories = [
     'Food',
     'Transport',
     'Education',
-    'Shopping',
     'Entertainment',
-    'Other',
+    'Others',
   ];
 
   Future<void> selectDate() async {
-    final DateTime? pickedDate = await showDatePicker(
+    final pickedDate = await showDatePicker(
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2020),
-      lastDate: DateTime(2035),
+      lastDate: DateTime(2030),
     );
 
     if (pickedDate != null) {
@@ -815,16 +786,51 @@ class _AddExpensePageState extends State<AddExpensePage> {
   }
 
   void saveExpense() {
-    if (_formKey.currentState!.validate()) {
-      final expense = Expense(
-        title: titleController.text.trim(),
-        amount: double.parse(amountController.text.trim()),
-        category: selectedCategory,
-        date: selectedDate,
-      );
-
-      Navigator.pop(context, expense);
+    if (!formKey.currentState!.validate()) {
+      return;
     }
+
+    final amount =
+        double.tryParse(amountController.text.trim());
+
+    if (amount == null || amount <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Enter a valid amount.'),
+        ),
+      );
+      return;
+    }
+
+    Navigator.pop(
+      context,
+      {
+        'title': titleController.text.trim(),
+        'amount': amount,
+        'category': selectedCategory,
+        'date':
+            '${selectedDate.day} ${_monthName(selectedDate.month)} ${selectedDate.year}',
+      },
+    );
+  }
+
+  String _monthName(int month) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+
+    return months[month - 1];
   }
 
   @override
@@ -840,156 +846,158 @@ class _AddExpensePageState extends State<AddExpensePage> {
       appBar: AppBar(
         title: const Text('Add Expense'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Add New Expense',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
+
+      body: Form(
+        key: formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: [
+            TextFormField(
+              controller: titleController,
+              decoration: const InputDecoration(
+                labelText: 'Expense Title',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Please enter an expense title';
+                }
+                return null;
+              },
+            ),
+
+            const SizedBox(height: 18),
+
+            TextFormField(
+              controller: amountController,
+              keyboardType:
+                  const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              decoration: const InputDecoration(
+                labelText: 'Amount',
+                prefixText: '₹ ',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Please enter an amount';
+                }
+
+                final amount =
+                    double.tryParse(value.trim());
+
+                if (amount == null || amount <= 0) {
+                  return 'Enter a valid amount';
+                }
+
+                return null;
+              },
+            ),
+
+            const SizedBox(height: 18),
+
+            DropdownButtonFormField<String>(
+              value: selectedCategory,
+              decoration: const InputDecoration(
+                labelText: 'Category',
+                border: OutlineInputBorder(),
+              ),
+              items: categories.map((category) {
+                return DropdownMenuItem(
+                  value: category,
+                  child: Text(category),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() {
+                    selectedCategory = value;
+                  });
+                }
+              },
+            ),
+
+            const SizedBox(height: 18),
+
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.calendar_month),
+              title: const Text('Date'),
+              subtitle: Text(
+                '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
+              ),
+              trailing: ElevatedButton(
+                onPressed: selectDate,
+                child: const Text('Select Date'),
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            SizedBox(
+              height: 52,
+              child: ElevatedButton.icon(
+                onPressed: saveExpense,
+                icon: const Icon(Icons.save),
+                label: const Text(
+                  'Save Expense',
+                  style: TextStyle(fontSize: 16),
                 ),
               ),
-
-              const SizedBox(height: 8),
-
-              const Text(
-                'Enter the details of your expense below.',
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-
-              const SizedBox(height: 25),
-
-              // TITLE
-              TextFormField(
-                controller: titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Expense Title',
-                  hintText: 'Example: Lunch',
-                  prefixIcon: Icon(Icons.title),
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter an expense title';
-                  }
-
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 18),
-
-              // AMOUNT
-              TextFormField(
-                controller: amountController,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                decoration: const InputDecoration(
-                  labelText: 'Amount',
-                  hintText: 'Example: 250',
-                  prefixIcon: Icon(Icons.currency_rupee),
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter an amount';
-                  }
-
-                  final amount = double.tryParse(value.trim());
-
-                  if (amount == null) {
-                    return 'Please enter a valid number';
-                  }
-
-                  if (amount <= 0) {
-                    return 'Amount must be greater than zero';
-                  }
-
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 18),
-
-              // CATEGORY
-              DropdownButtonFormField<String>(
-                initialValue: selectedCategory,
-                decoration: const InputDecoration(
-                  labelText: 'Category',
-                  prefixIcon: Icon(Icons.category),
-                  border: OutlineInputBorder(),
-                ),
-                items: categories.map((category) {
-                  return DropdownMenuItem(
-                    value: category,
-                    child: Text(category),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      selectedCategory = value;
-                    });
-                  }
-                },
-              ),
-
-              const SizedBox(height: 18),
-
-              // DATE PICKER
-              InkWell(
-                onTap: selectDate,
-                child: InputDecorator(
-                  decoration: const InputDecoration(
-                    labelText: 'Date',
-                    prefixIcon: Icon(Icons.calendar_month),
-                    border: OutlineInputBorder(),
-                  ),
-                  child: Text(
-                    formatDate(selectedDate),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              // SAVE BUTTON
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton.icon(
-                  onPressed: saveExpense,
-                  icon: const Icon(Icons.save),
-                  label: const Text(
-                    'Save Expense',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-// ------------------------------------------------------------
-// EVENTS PAGE
-// ------------------------------------------------------------
+// ============================================================
+// TIMETABLE SCREEN
+// ============================================================
 
-class EventsPage extends StatelessWidget {
-  const EventsPage({super.key});
+class TimetableScreen extends StatelessWidget {
+  const TimetableScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final classes = [
+      ['09:00 AM', 'DAA', 'Room C-201'],
+      ['10:00 AM', 'DBMS', 'Room C-203'],
+      ['11:00 AM', 'Computer Networks', 'Room C-205'],
+      ['01:00 PM', 'Flutter', 'Room C-201'],
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Timetable'),
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: classes.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: ListTile(
+              leading: const Icon(Icons.access_time),
+              title: Text(classes[index][1]),
+              subtitle: Text(
+                '${classes[index][0]} • ${classes[index][2]}',
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// ============================================================
+// EVENTS SCREEN
+// ============================================================
+
+class EventsScreen extends StatelessWidget {
+  const EventsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -998,29 +1006,29 @@ class EventsPage extends StatelessWidget {
         title: const Text('Campus Events'),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(18),
-        children: const [
+        padding: const EdgeInsets.all(16),
+        children: [
           Card(
             child: ListTile(
-              leading: Icon(
-                Icons.calendar_month,
-                color: Colors.deepOrange,
+              leading: const Icon(
+                Icons.celebration,
+                color: Colors.orange,
               ),
-              title: Text('CSE Technical Fest'),
-              subtitle: Text(
+              title: const Text('CSE Technical Fest'),
+              subtitle: const Text(
                 'Coding • Hackathon • Workshops',
               ),
             ),
           ),
           Card(
             child: ListTile(
-              leading: Icon(
-                Icons.school,
+              leading: const Icon(
+                Icons.code,
                 color: Colors.blue,
               ),
-              title: Text('Workshop on Flutter'),
-              subtitle: Text(
-                'Learn Flutter development basics.',
+              title: const Text('Hackathon 2026'),
+              subtitle: const Text(
+                'Technical Event • ACE Engineering College',
               ),
             ),
           ),
@@ -1028,58 +1036,4 @@ class EventsPage extends StatelessWidget {
       ),
     );
   }
-}
-
-// ------------------------------------------------------------
-// PROFILE PAGE
-// ------------------------------------------------------------
-
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            CircleAvatar(
-              radius: 50,
-              backgroundColor: Color(0xFFE8D9FF),
-              child: Icon(
-                Icons.person,
-                size: 60,
-                color: Colors.deepPurple,
-              ),
-            ),
-            SizedBox(height: 15),
-            Text(
-              'Student',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 5),
-            Text('CSE - Computer Science'),
-            Text('ACE Engineering College'),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ------------------------------------------------------------
-// HELPER FUNCTION
-// ------------------------------------------------------------
-
-String formatDate(DateTime date) {
-  return '${date.day.toString().padLeft(2, '0')}/'
-      '${date.month.toString().padLeft(2, '0')}/'
-      '${date.year}';
 }
