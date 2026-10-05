@@ -1,7 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const StudentCampusCompanion());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ExpenseProvider(),
+      child: const StudentCampusCompanion(),
+    ),
+  );
+}
+
+// ============================================================
+// EXPENSE PROVIDER - EXPERIMENT 5B
+// ============================================================
+
+class ExpenseProvider extends ChangeNotifier {
+  final List<Map<String, dynamic>> _expenses = [
+    {
+      'title': 'Food',
+      'amount': 1200.0,
+      'category': 'Food',
+      'date': '10 Sep 2026',
+    },
+    {
+      'title': 'Transport',
+      'amount': 600.0,
+      'category': 'Transport',
+      'date': '08 Sep 2026',
+    },
+    {
+      'title': 'Books',
+      'amount': 800.0,
+      'category': 'Education',
+      'date': '05 Sep 2026',
+    },
+  ];
+
+  List<Map<String, dynamic>> get expenses => _expenses;
+
+  double get totalExpenses {
+    return _expenses.fold(
+      0.0,
+      (sum, item) => sum + item['amount'],
+    );
+  }
+
+  // Provider state update
+  void addExpense(Map<String, dynamic> expense) {
+    _expenses.add(expense);
+
+    // Notify all listening widgets
+    notifyListeners();
+  }
+
+  void removeExpense(int index) {
+    _expenses.removeAt(index);
+    notifyListeners();
+  }
 }
 
 // ============================================================
@@ -29,7 +84,7 @@ class StudentCampusCompanion extends StatelessWidget {
 }
 
 // ============================================================
-// HOME SCREEN - STATEFUL WIDGET
+// HOME SCREEN - 5A STATEFUL
 // ============================================================
 
 class HomeScreen extends StatefulWidget {
@@ -40,10 +95,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // 5A: State variable
   bool reminderCompleted = false;
 
-  // 5A: setState() changes the UI
   void toggleReminder() {
     setState(() {
       reminderCompleted = !reminderCompleted;
@@ -71,7 +124,6 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                // Welcome
                 const Text(
                   'Hello, Student! 👋',
                   style: TextStyle(
@@ -92,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 const SizedBox(height: 20),
 
-                // Student Profile
+                // PROFILE
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(18),
@@ -129,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 const SizedBox(height: 12),
 
-                // Quick Access Cards
+                // QUICK ACCESS
                 GridView.count(
                   crossAxisCount: isWide ? 2 : 1,
                   crossAxisSpacing: 12,
@@ -138,6 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
+
                     FeatureCard(
                       icon: Icons.book,
                       title: 'Subjects',
@@ -146,7 +199,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const SubjectsScreen(),
+                            builder: (_) =>
+                                const SubjectsScreen(),
                           ),
                         );
                       },
@@ -160,7 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const AssignmentsScreen(),
+                            builder: (_) =>
+                                const AssignmentsScreen(),
                           ),
                         );
                       },
@@ -174,7 +229,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const TimetableScreen(),
+                            builder: (_) =>
+                                const TimetableScreen(),
                           ),
                         );
                       },
@@ -183,12 +239,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     FeatureCard(
                       icon: Icons.account_balance_wallet,
                       title: 'Expenses',
-                      subtitle: '₹2,450',
+
+                      // Provider is used here to display
+                      // the current total expense.
+                      subtitle:
+                          '₹${context.watch<ExpenseProvider>().totalExpenses.toStringAsFixed(0)}',
+
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const ExpensesScreen(),
+                            builder: (_) =>
+                                const ExpensesScreen(),
                           ),
                         );
                       },
@@ -198,7 +260,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 const SizedBox(height: 24),
 
-                // Upcoming Event
                 const Text(
                   'Upcoming Event',
                   style: TextStyle(
@@ -223,11 +284,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: 38,
                         color: Colors.deepOrange,
                       ),
+
                       const SizedBox(width: 15),
 
                       const Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
                           children: [
                             Text(
                               'CSE Technical Fest',
@@ -249,7 +312,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => const EventsScreen(),
+                              builder: (_) =>
+                                  const EventsScreen(),
                             ),
                           );
                         },
@@ -261,18 +325,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 const SizedBox(height: 18),
 
-                // 5A STATE CHANGE
+                // 5A SETSTATE
                 GestureDetector(
                   onTap: toggleReminder,
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
+                    duration:
+                        const Duration(milliseconds: 250),
                     width: double.infinity,
                     padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
                       color: reminderCompleted
                           ? const Color(0xFFD5F5D5)
                           : const Color(0xFFE5F6E8),
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius:
+                          BorderRadius.circular(18),
                     ),
                     child: Row(
                       children: [
@@ -297,7 +363,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     : "Today's Reminder",
                                 style: const TextStyle(
                                   fontSize: 17,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight:
+                                      FontWeight.bold,
                                 ),
                               ),
                               const SizedBox(height: 5),
@@ -322,12 +389,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => const EventsScreen(),
+                          builder: (_) =>
+                              const EventsScreen(),
                         ),
                       );
                     },
                     icon: const Icon(Icons.apps),
-                    label: const Text('Explore Campus'),
+                    label:
+                        const Text('Explore Campus'),
                   ),
                 ),
               ],
@@ -338,7 +407,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -358,7 +427,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 // ============================================================
-// PROFILE WIDGETS - STATELESS WIDGETS
+// PROFILE
 // ============================================================
 
 class ProfileIcon extends StatelessWidget {
@@ -384,7 +453,8 @@ class ProfileInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment:
+          CrossAxisAlignment.start,
       children: [
         Text(
           'Student Profile',
@@ -403,7 +473,7 @@ class ProfileInformation extends StatelessWidget {
 }
 
 // ============================================================
-// FEATURE CARD - STATELESS
+// FEATURE CARD
 // ============================================================
 
 class FeatureCard extends StatelessWidget {
@@ -425,7 +495,8 @@ class FeatureCard extends StatelessWidget {
     return Card(
       elevation: 2,
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius:
+            BorderRadius.circular(16),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(18),
@@ -438,8 +509,10 @@ class FeatureCard extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment:
+                    MainAxisAlignment.center,
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
@@ -466,13 +539,13 @@ class FeatureCard extends StatelessWidget {
 }
 
 // ============================================================
-// SUBJECTS SCREEN
+// SUBJECTS
 // ============================================================
 
 class SubjectsScreen extends StatelessWidget {
   const SubjectsScreen({super.key});
 
-  final List<String> subjects = const [
+  static const List<String> subjects = [
     'Data Analytics',
     'Computer Networks',
     'Flutter',
@@ -497,7 +570,8 @@ class SubjectsScreen extends StatelessWidget {
                 child: Text('${index + 1}'),
               ),
               title: Text(subjects[index]),
-              trailing: const Icon(Icons.chevron_right),
+              trailing:
+                  const Icon(Icons.chevron_right),
             ),
           );
         },
@@ -507,7 +581,7 @@ class SubjectsScreen extends StatelessWidget {
 }
 
 // ============================================================
-// ASSIGNMENTS SCREEN - STATEFUL
+// ASSIGNMENTS - 5A SETSTATE
 // ============================================================
 
 class AssignmentsScreen extends StatefulWidget {
@@ -518,16 +592,20 @@ class AssignmentsScreen extends StatefulWidget {
       _AssignmentsScreenState();
 }
 
-class _AssignmentsScreenState extends State<AssignmentsScreen> {
+class _AssignmentsScreenState
+    extends State<AssignmentsScreen> {
+
   final List<Map<String, dynamic>> assignments = [
     {
       'title': 'DAA Assignment 1',
-      'subject': 'Design and Analysis of Algorithms',
+      'subject':
+          'Design and Analysis of Algorithms',
       'completed': false,
     },
     {
       'title': 'DBMS Assignment 2',
-      'subject': 'Database Management Systems',
+      'subject':
+          'Database Management Systems',
       'completed': false,
     },
     {
@@ -559,7 +637,8 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
         padding: const EdgeInsets.all(16),
         itemCount: assignments.length,
         itemBuilder: (context, index) {
-          final assignment = assignments[index];
+          final assignment =
+              assignments[index];
 
           return Card(
             child: ListTile(
@@ -574,14 +653,17 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
               title: Text(
                 assignment['title'],
                 style: TextStyle(
-                  decoration: assignment['completed']
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none,
+                  decoration:
+                      assignment['completed']
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
                 ),
               ),
-              subtitle: Text(assignment['subject']),
+              subtitle:
+                  Text(assignment['subject']),
               trailing: Checkbox(
-                value: assignment['completed'],
+                value:
+                    assignment['completed'],
                 onChanged: (_) {
                   toggleAssignment(index);
                 },
@@ -595,69 +677,60 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
 }
 
 // ============================================================
-// EXPENSES SCREEN - STATEFUL
+// EXPENSES - PROVIDER 5B
 // ============================================================
 
-class ExpensesScreen extends StatefulWidget {
+class ExpensesScreen extends StatelessWidget {
   const ExpensesScreen({super.key});
 
-  @override
-  State<ExpensesScreen> createState() => _ExpensesScreenState();
-}
+  Future<void> openAddExpense(
+      BuildContext context) async {
 
-class _ExpensesScreenState extends State<ExpensesScreen> {
-  final List<Map<String, dynamic>> expenses = [
-    {
-      'title': 'Food',
-      'amount': 1200.0,
-      'category': 'Food',
-      'date': '10 Sep 2026',
-    },
-    {
-      'title': 'Transport',
-      'amount': 600.0,
-      'category': 'Transport',
-      'date': '08 Sep 2026',
-    },
-    {
-      'title': 'Books',
-      'amount': 800.0,
-      'category': 'Education',
-      'date': '05 Sep 2026',
-    },
-  ];
-
-  double get totalExpenses {
-    return expenses.fold(
-      0.0,
-      (sum, item) => sum + item['amount'],
-    );
-  }
-
-  Future<void> addExpense() async {
-    final result = await Navigator.push<Map<String, dynamic>>(
+    final result =
+        await Navigator.push<Map<String, dynamic>>(
       context,
       MaterialPageRoute(
-        builder: (_) => const AddExpenseScreen(),
+        builder: (_) =>
+            const AddExpenseScreen(),
       ),
     );
 
-    if (result != null) {
-      // 5A: setState updates the expense list and total
-      setState(() {
-        expenses.add(result);
-      });
+    if (result != null && context.mounted) {
+
+      // Get Provider instance
+      final provider =
+          Provider.of<ExpenseProvider>(
+        context,
+        listen: false,
+      );
+
+      // Add expense through Provider
+      provider.addExpense(result);
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+        const SnackBar(
+          content:
+              Text('Expense added successfully!'),
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+
+    // Provider listens for notifyListeners()
+    final provider =
+        Provider.of<ExpenseProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expenses'),
         actions: [
           IconButton(
-            onPressed: addExpense,
+            onPressed: () =>
+                openAddExpense(context),
             icon: const Icon(Icons.add),
           ),
         ],
@@ -665,13 +738,16 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
       body: Column(
         children: [
+
+          // TOTAL EXPENSE
           Container(
             width: double.infinity,
             margin: const EdgeInsets.all(16),
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: const Color(0xFFE2F2FF),
-              borderRadius: BorderRadius.circular(18),
+              borderRadius:
+                  BorderRadius.circular(18),
             ),
             child: Column(
               children: [
@@ -679,15 +755,19 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                   'Total Expenses',
                   style: TextStyle(
                     fontSize: 17,
-                    fontWeight: FontWeight.bold,
+                    fontWeight:
+                        FontWeight.bold,
                   ),
                 ),
+
                 const SizedBox(height: 8),
+
                 Text(
-                  '₹${totalExpenses.toStringAsFixed(0)}',
+                  '₹${provider.totalExpenses.toStringAsFixed(0)}',
                   style: const TextStyle(
                     fontSize: 30,
-                    fontWeight: FontWeight.bold,
+                    fontWeight:
+                        FontWeight.bold,
                   ),
                 ),
               ],
@@ -695,33 +775,48 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
           ),
 
           Expanded(
-            child: expenses.isEmpty
+            child: provider.expenses.isEmpty
                 ? const Center(
-                    child: Text('No expenses added yet.'),
+                    child: Text(
+                      'No expenses added yet.',
+                    ),
                   )
                 : ListView.builder(
-                    padding: const EdgeInsets.symmetric(
+                    padding:
+                        const EdgeInsets.symmetric(
                       horizontal: 16,
                     ),
-                    itemCount: expenses.length,
-                    itemBuilder: (context, index) {
-                      final expense = expenses[index];
+                    itemCount:
+                        provider.expenses.length,
+                    itemBuilder:
+                        (context, index) {
+
+                      final expense =
+                          provider.expenses[index];
 
                       return Card(
                         child: ListTile(
-                          leading: const CircleAvatar(
+                          leading:
+                              const CircleAvatar(
                             child: Icon(
-                              Icons.account_balance_wallet,
+                              Icons
+                                  .account_balance_wallet,
                             ),
                           ),
-                          title: Text(expense['title']),
+
+                          title: Text(
+                              expense['title']),
+
                           subtitle: Text(
                             '${expense['category']} • ${expense['date']}',
                           ),
+
                           trailing: Text(
                             '₹${expense['amount'].toStringAsFixed(0)}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
+                            style:
+                                const TextStyle(
+                              fontWeight:
+                                  FontWeight.bold,
                             ),
                           ),
                         ),
@@ -732,17 +827,20 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
         ],
       ),
 
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: addExpense,
+      floatingActionButton:
+          FloatingActionButton.extended(
+        onPressed: () =>
+            openAddExpense(context),
         icon: const Icon(Icons.add),
-        label: const Text('Add Expense'),
+        label:
+            const Text('Add Expense'),
       ),
     );
   }
 }
 
 // ============================================================
-// ADD EXPENSE SCREEN
+// ADD EXPENSE
 // ============================================================
 
 class AddExpenseScreen extends StatefulWidget {
@@ -753,14 +851,22 @@ class AddExpenseScreen extends StatefulWidget {
       _AddExpenseScreenState();
 }
 
-class _AddExpenseScreenState extends State<AddExpenseScreen> {
-  final formKey = GlobalKey<FormState>();
+class _AddExpenseScreenState
+    extends State<AddExpenseScreen> {
 
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
+  final formKey =
+      GlobalKey<FormState>();
+
+  final titleController =
+      TextEditingController();
+
+  final amountController =
+      TextEditingController();
 
   String selectedCategory = 'Food';
-  DateTime selectedDate = DateTime.now();
+
+  DateTime selectedDate =
+      DateTime.now();
 
   final List<String> categories = [
     'Food',
@@ -771,7 +877,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   ];
 
   Future<void> selectDate() async {
-    final pickedDate = await showDatePicker(
+
+    final pickedDate =
+        await showDatePicker(
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2020),
@@ -786,35 +894,47 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   }
 
   void saveExpense() {
-    if (!formKey.currentState!.validate()) {
+
+    if (!formKey.currentState!
+        .validate()) {
       return;
     }
 
     final amount =
-        double.tryParse(amountController.text.trim());
+        double.tryParse(
+      amountController.text.trim(),
+    );
 
-    if (amount == null || amount <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
+    if (amount == null ||
+        amount <= 0) {
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
         const SnackBar(
-          content: Text('Enter a valid amount.'),
+          content:
+              Text('Enter a valid amount.'),
         ),
       );
+
       return;
     }
 
     Navigator.pop(
       context,
       {
-        'title': titleController.text.trim(),
+        'title':
+            titleController.text.trim(),
         'amount': amount,
-        'category': selectedCategory,
+        'category':
+            selectedCategory,
         'date':
-            '${selectedDate.day} ${_monthName(selectedDate.month)} ${selectedDate.year}',
+            '${selectedDate.day} ${monthName(selectedDate.month)} ${selectedDate.year}',
       },
     );
   }
 
-  String _monthName(int month) {
+  String monthName(int month) {
+
     const months = [
       'Jan',
       'Feb',
@@ -842,26 +962,38 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Expense'),
+        title:
+            const Text('Add Expense'),
       ),
 
       body: Form(
         key: formKey,
         child: ListView(
-          padding: const EdgeInsets.all(20),
+          padding:
+              const EdgeInsets.all(20),
           children: [
+
             TextFormField(
-              controller: titleController,
-              decoration: const InputDecoration(
-                labelText: 'Expense Title',
-                border: OutlineInputBorder(),
+              controller:
+                  titleController,
+              decoration:
+                  const InputDecoration(
+                labelText:
+                    'Expense Title',
+                border:
+                    OutlineInputBorder(),
               ),
               validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please enter an expense title';
+
+                if (value == null ||
+                    value.trim().isEmpty) {
+                  return
+                      'Please enter an expense title';
                 }
+
                 return null;
               },
             ),
@@ -869,26 +1001,37 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             const SizedBox(height: 18),
 
             TextFormField(
-              controller: amountController,
+              controller:
+                  amountController,
               keyboardType:
-                  const TextInputType.numberWithOptions(
+                  const TextInputType
+                      .numberWithOptions(
                 decimal: true,
               ),
-              decoration: const InputDecoration(
+              decoration:
+                  const InputDecoration(
                 labelText: 'Amount',
                 prefixText: '₹ ',
-                border: OutlineInputBorder(),
+                border:
+                    OutlineInputBorder(),
               ),
               validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please enter an amount';
+
+                if (value == null ||
+                    value.trim().isEmpty) {
+                  return
+                      'Please enter an amount';
                 }
 
                 final amount =
-                    double.tryParse(value.trim());
+                    double.tryParse(
+                  value.trim(),
+                );
 
-                if (amount == null || amount <= 0) {
-                  return 'Enter a valid amount';
+                if (amount == null ||
+                    amount <= 0) {
+                  return
+                      'Enter a valid amount';
                 }
 
                 return null;
@@ -899,20 +1042,28 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
             DropdownButtonFormField<String>(
               value: selectedCategory,
-              decoration: const InputDecoration(
+              decoration:
+                  const InputDecoration(
                 labelText: 'Category',
-                border: OutlineInputBorder(),
+                border:
+                    OutlineInputBorder(),
               ),
-              items: categories.map((category) {
-                return DropdownMenuItem(
-                  value: category,
-                  child: Text(category),
-                );
-              }).toList(),
+              items:
+                  categories.map(
+                (category) {
+                  return DropdownMenuItem(
+                    value: category,
+                    child:
+                        Text(category),
+                  );
+                },
+              ).toList(),
               onChanged: (value) {
+
                 if (value != null) {
                   setState(() {
-                    selectedCategory = value;
+                    selectedCategory =
+                        value;
                   });
                 }
               },
@@ -921,15 +1072,25 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             const SizedBox(height: 18),
 
             ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.calendar_month),
-              title: const Text('Date'),
+              contentPadding:
+                  EdgeInsets.zero,
+
+              leading: const Icon(
+                Icons.calendar_month,
+              ),
+
+              title:
+                  const Text('Date'),
+
               subtitle: Text(
                 '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
               ),
-              trailing: ElevatedButton(
+
+              trailing:
+                  ElevatedButton(
                 onPressed: selectDate,
-                child: const Text('Select Date'),
+                child:
+                    const Text('Select Date'),
               ),
             ),
 
@@ -937,12 +1098,17 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
             SizedBox(
               height: 52,
-              child: ElevatedButton.icon(
-                onPressed: saveExpense,
-                icon: const Icon(Icons.save),
+              child:
+                  ElevatedButton.icon(
+                onPressed:
+                    saveExpense,
+                icon:
+                    const Icon(Icons.save),
                 label: const Text(
                   'Save Expense',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),
@@ -954,7 +1120,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 }
 
 // ============================================================
-// TIMETABLE SCREEN
+// TIMETABLE
 // ============================================================
 
 class TimetableScreen extends StatelessWidget {
@@ -962,26 +1128,41 @@ class TimetableScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final classes = [
       ['09:00 AM', 'DAA', 'Room C-201'],
       ['10:00 AM', 'DBMS', 'Room C-203'],
-      ['11:00 AM', 'Computer Networks', 'Room C-205'],
+      [
+        '11:00 AM',
+        'Computer Networks',
+        'Room C-205'
+      ],
       ['01:00 PM', 'Flutter', 'Room C-201'],
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Timetable'),
+        title:
+            const Text('Timetable'),
       ),
+
       body: ListView.builder(
-        padding: const EdgeInsets.all(16),
+        padding:
+            const EdgeInsets.all(16),
         itemCount: classes.length,
-        itemBuilder: (context, index) {
+        itemBuilder:
+            (context, index) {
+
           return Card(
             child: ListTile(
-              leading: const Icon(Icons.access_time),
-              title: Text(classes[index][1]),
-              subtitle: Text(
+              leading:
+                  const Icon(Icons.access_time),
+
+              title:
+                  Text(classes[index][1]),
+
+              subtitle:
+                  Text(
                 '${classes[index][0]} • ${classes[index][2]}',
               ),
             ),
@@ -993,7 +1174,7 @@ class TimetableScreen extends StatelessWidget {
 }
 
 // ============================================================
-// EVENTS SCREEN
+// EVENTS
 // ============================================================
 
 class EventsScreen extends StatelessWidget {
@@ -1001,33 +1182,54 @@ class EventsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Campus Events'),
+        title:
+            const Text('Campus Events'),
       ),
+
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding:
+            const EdgeInsets.all(16),
+
         children: [
+
           Card(
             child: ListTile(
-              leading: const Icon(
+              leading:
+                  const Icon(
                 Icons.celebration,
                 color: Colors.orange,
               ),
-              title: const Text('CSE Technical Fest'),
-              subtitle: const Text(
+
+              title:
+                  const Text(
+                'CSE Technical Fest',
+              ),
+
+              subtitle:
+                  const Text(
                 'Coding • Hackathon • Workshops',
               ),
             ),
           ),
+
           Card(
             child: ListTile(
-              leading: const Icon(
+              leading:
+                  const Icon(
                 Icons.code,
                 color: Colors.blue,
               ),
-              title: const Text('Hackathon 2026'),
-              subtitle: const Text(
+
+              title:
+                  const Text(
+                'Hackathon 2026',
+              ),
+
+              subtitle:
+                  const Text(
                 'Technical Event • ACE Engineering College',
               ),
             ),

@@ -331,6 +331,57 @@ updated automatically using setState().
 
 ---
 
+## Experiment 5B – Provider State Management
+
+In this experiment, I implemented Provider-based state management in the
+Student Campus Companion using the `provider` package.
+
+The `ChangeNotifier` class was used to create an `ExpenseProvider` that
+manages the expense data separately from the user interface.
+
+The `ChangeNotifierProvider` was used to provide the expense state to the
+application. The `Provider.of` and `context.watch` methods were used to
+access and listen to the expense data from different widgets.
+
+When a new expense is added, the `addExpense()` method updates the expense
+list and calls `notifyListeners()`. This automatically updates the expense
+list and total expense amount displayed on the screen.
+
+Unlike the previous experiment, where state was handled using `setState()`,
+this experiment demonstrates how Provider can be used to manage and share
+application state in a more organized way.
+
+This experiment helped me understand centralized state management using
+Provider, ChangeNotifier, and notifyListeners() in Flutter.
+
+### Experiment 5B Output
+
+The following screenshots demonstrate the Provider-based state management
+implemented in the Student Campus Companion.
+
+#### Expense Before Adding
+
+The Expenses screen displays the existing expense list and the current
+total expense amount.
+
+![Experiment 5B Expense Screen](images/exp_5b_expense_before.png)
+
+#### Adding a New Expense
+
+A new expense can be entered using the Add Expense form. After saving,
+the expense is added to the Provider-managed expense list.
+
+![Experiment 5B Add Expense](images/exp_5b_add_expense.png)
+
+#### Updated Expense List
+
+After adding the expense, the Expenses screen automatically updates the
+expense list and total amount using Provider and notifyListeners().
+
+![Experiment 5B Updated Expense](images/exp_5b_expense_after.png)
+
+---
+
 ## Expected Final Application
 
 The following sample image shows the expected design of the Student Campus
