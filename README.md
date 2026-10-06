@@ -440,6 +440,23 @@ implementing centralized themes and reusable custom styles.
 ![Experiment 6B Output](images/exp_6b_output.png)
 
 ---
+## Experiment 7A – Forms and Input Fields
+
+In this experiment, I implemented a Student Details form in the Student Campus Companion application to collect student information using different Flutter input widgets.
+
+Text form fields were used to collect the student's full name, email address, phone number, and roll number. Dropdown menus were added to select the department and academic year, while radio buttons were used to select gender.
+
+A date picker was implemented to select the student's date of birth. Form validation was added to check the entered details and display error messages when required fields were empty or invalid.
+
+When the user clicks the Submit Details button, an alert dialog displays the entered student information for confirmation.
+
+This experiment helped me understand Flutter forms, input fields, dropdown menus, radio buttons, date pickers, form validation, and handling user input.
+
+### Experiment 7A Output
+
+The following screenshot shows the Student Campus Companion application after implementing the Student Details form and its input fields.
+
+![Experiment 7A Output](images/exp_7a_output.png)
 
 ## Expected Final Application
 
