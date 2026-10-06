@@ -412,6 +412,35 @@ implementing reusable custom widgets and the application theme.
 
 ---
 
+## Experiment 6B – Applying Themes and Custom Styles
+
+In this experiment, I improved the structure and styling of the Student
+Campus Companion by applying a centralized Flutter theme and creating
+reusable custom styles.
+
+A custom `CampusStyles` class was created to define common colors and
+text styles that can be reused throughout the application.
+
+`ThemeData` was used to define common styling for the application,
+including the AppBar, Cards, ElevatedButtons, input fields, checkboxes,
+and FloatingActionButtons.
+
+The theme and custom styles were applied across different screens of the
+application to maintain a consistent appearance throughout the interface.
+
+This experiment helped me understand how centralized themes and reusable
+styles improve code reusability, readability, consistency, and
+maintainability in Flutter applications.
+
+### Experiment 6B Output
+
+The following screenshot shows the Student Campus Companion after
+implementing centralized themes and reusable custom styles.
+
+![Experiment 6B Output](images/exp_6b_output.png)
+
+---
+
 ## Expected Final Application
 
 The following sample image shows the expected design of the Student Campus
