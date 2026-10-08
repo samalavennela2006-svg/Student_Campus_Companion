@@ -490,6 +490,20 @@ This experiment helped me understand Flutter animations, animation controllers, 
 
 The Student Profile card smoothly fades in and slides upward when the Home screen is opened. Since the animation occurs over time, a static screenshot does not fully represent the animation.
 
+## Experiment 8B – Interactive Animations
+
+In this experiment, I implemented an interactive animation in the Student Campus Companion application using Flutter's `AnimatedContainer`.
+
+An animation was added to the Today's Reminder card on the Home screen. When the user taps the reminder card, its appearance changes smoothly instead of changing instantly.
+
+The reminder card changes its background color, icon, and displayed text when the reminder is completed. The animation is controlled using `AnimatedContainer` with a defined animation duration.
+
+This experiment helped me understand interactive animations, `AnimatedContainer`, state changes, animation duration, and creating smooth transitions based on user interaction.
+
+### Experiment 8B Output
+
+The Today's Reminder card smoothly changes its appearance when the user taps it. Since the animation occurs over time, a static screenshot does not fully represent the interactive animation.
+
 ## Expected Final Application
 
 The following sample image shows the expected design of the Student Campus
