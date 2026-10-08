@@ -458,6 +458,24 @@ The following screenshot shows the Student Campus Companion application after im
 
 ![Experiment 7A Output](images/exp_7a_output.png)
 
+## Experiment 7B – Form Validation and Error Handling
+
+In this experiment, I enhanced the Student Details form in the Student Campus Companion application by implementing form validation and error handling.
+
+Validation was added to check the student's full name, email address, phone number, and roll number. Validation was also implemented for the department and academic year dropdowns to ensure that valid options are selected.
+
+Error handling was added for gender and date of birth fields. When the user submits the form with missing or invalid information, appropriate error messages are displayed and a SnackBar informs the user to correct the highlighted fields.
+
+When all the required information is entered correctly, the form is successfully submitted and an alert dialog displays the entered student information for confirmation.
+
+This experiment helped me understand form validation, error handling, input validation, error messages, SnackBar notifications, and successful form submission in Flutter.
+
+### Experiment 7B Output
+
+The following screenshot shows the Student Campus Companion application after implementing form validation and error handling in the Student Details form.
+
+![Experiment 7B Output](images/exp_7b_output.png)
+
 ## Expected Final Application
 
 The following sample image shows the expected design of the Student Campus
