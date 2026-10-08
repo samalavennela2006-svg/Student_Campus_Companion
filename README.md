@@ -476,6 +476,20 @@ The following screenshot shows the Student Campus Companion application after im
 
 ![Experiment 7B Output](images/exp_7b_output.png)
 
+## Experiment 8A – Animations
+
+In this experiment, I implemented animations in the Student Campus Companion application to make the user interface more smooth and interactive.
+
+An animation was added to the Student Profile card on the Home screen. When the Home screen is opened, the profile card smoothly fades into view and slides upward to its normal position.
+
+The animation was implemented using Flutter's `AnimationController`, `FadeTransition`, and `SlideTransition`. The animation controller controls the duration and execution of the animation, while the transition widgets provide the fade and slide effects.
+
+This experiment helped me understand Flutter animations, animation controllers, fade transitions, slide transitions, animation duration, and the use of `SingleTickerProviderStateMixin`.
+
+### Experiment 8A Output
+
+The Student Profile card smoothly fades in and slides upward when the Home screen is opened. Since the animation occurs over time, a static screenshot does not fully represent the animation.
+
 ## Expected Final Application
 
 The following sample image shows the expected design of the Student Campus

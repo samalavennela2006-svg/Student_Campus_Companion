@@ -526,11 +526,49 @@ class HomeScreen extends StatefulWidget {
 
 
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+
+      late AnimationController _animationController;
+
+      late Animation<double> _fadeAnimation;
+
+      late Animation<Offset> _slideAnimation;
 
   bool reminderCompleted = false;
 
+    @override
+  void initState() {
+    super.initState();
 
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeIn,
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.25),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeOut,
+      ),
+    );
+
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   void toggleReminder() {
 
@@ -606,54 +644,37 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 // Student profile
 
-                Container(
+                FadeTransition(
+  opacity: _fadeAnimation,
+  child: SlideTransition(
+    position: _slideAnimation,
+    child: Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: const Color(0xFFE1F2FF),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: isWide
+          ? const Row(
+              children: [
+                ProfileIcon(),
+                SizedBox(width: 16),
+                ProfileInformation(),
+              ],
+            )
+          : const Column(
+              children: [
+                ProfileIcon(),
+                SizedBox(height: 10),
+                ProfileInformation(),
+              ],
+            ),
+    ),
+  ),
+),
 
-                  width: double.infinity,
-
-                  padding: const EdgeInsets.all(18),
-
-                  decoration: BoxDecoration(
-
-                    color: const Color(0xFFE1F2FF),
-
-                    borderRadius: BorderRadius.circular(18),
-
-                  ),
-
-                  child: isWide
-
-                      ? const Row(
-
-                          children: [
-
-                            ProfileIcon(),
-
-                            SizedBox(width: 16),
-
-                            ProfileInformation(),
-
-                          ],
-
-                        )
-
-                      : const Column(
-
-                          children: [
-
-                            ProfileIcon(),
-
-                            SizedBox(height: 10),
-
-                            ProfileInformation(),
-
-                          ],
-
-                        ),
-
-                ),
-
-
-
+                      
                 const SizedBox(height: 24),
 
 
